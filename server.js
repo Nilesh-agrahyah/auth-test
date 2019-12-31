@@ -1,7 +1,7 @@
 var fs = require('fs');
 var url = require('url');
 var http = require('http');
-var https = require('https');
+// var https = require('https');
 var flash = require('connect-flash');
 var morgan = require('morgan');
 var express = require('express');
@@ -68,7 +68,7 @@ var oauthModels = require('./models/oauth');
 
 
 
-var app_id = 'https://localhost:' + port;
+var app_id = 'http://localhost:' + port;
 var cookieSecret = 'ihytsrf334';
 
 var app = express();
@@ -97,7 +97,7 @@ app.use(passport.session());
 function requireHTTPS(req, res, next) {
 	if (req.get('X-Forwarded-Proto') === 'http') {
         //FYI this should work for local development as well
-        var url = 'https://' + req.get('host');
+        var url = 'http://' + req.get('host');
         if (req.get('host') === 'localhost') {
         	url += ':' + port;
         }
@@ -205,7 +205,7 @@ app.get('/auth/start',oauthServer.authorize(function(applicationID, redirectURI,
 			var match = false, uri = url.parse(redirectURI || '');
 			for (var i = 0; i < application.domains.length; i++) {
 				console.log("%s - %s - %j",application.domains[i], redirectURI, uri);
-				if (uri.host == application.domains[i] || (uri.protocol == application.domains[i] && uri.protocol != 'http' && uri.protocol != 'https')) {
+				if (uri.host == application.domains[i] || (uri.protocol == application.domains[i])) {
 					match = true;
 					break;
 				}
@@ -360,12 +360,12 @@ app.get('/testing',
 );
 
 var server = http.Server(app);
-if (app_id.match(/^https:\/\/localhost:/)) {
+if (app_id.match(/^http:\/\/localhost:/)) {
 	var options = {
 		key: fs.readFileSync('server.key'),
 		cert: fs.readFileSync('server.crt')
 	};
-	server = https.createServer(options, app);
+	server = http.createServer(options, app);
 } 
 
 
