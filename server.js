@@ -19,7 +19,7 @@ var oauthServer = require('./oauth');
 
 var port = (process.env.VCAP_APP_PORT || process.env.PORT || 3000);
 var host = (process.env.VCAP_APP_HOST || '0.0.0.0');
-var mongo_url = process.env.MONGO_URL;
+var mongo_url = "mongodb://localhost:27017/users";
 
 console.log(mongo_url);
 mongoose.Promise = global.Promise;
