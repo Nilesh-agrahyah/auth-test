@@ -19,7 +19,7 @@ var oauthServer = require('./oauth');
 
 var port = (process.env.VCAP_APP_PORT || process.env.PORT || 3000);
 var host = (process.env.VCAP_APP_HOST || '0.0.0.0');
-var mongo_url = 'mongodb+srv://nilesh:123@cluster0-pdgwi.mongodb.net/oauth?retryWrites=true&w=majority';
+var mongo_url = (process.env.MONGO_URL || 'mongodb+srv://nilesh:123@cluster0-pdgwi.mongodb.net/oauth?retryWrites=true&w=majority');
 
 console.log(mongo_url);
 mongoose.Promise = global.Promise;
