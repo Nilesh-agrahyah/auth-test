@@ -300,6 +300,7 @@ app.post('/command',
 	function(req,res,next){
 		console.log(req.user.username);
 		console.log(req.body);
+		res.send({userData: req.user});
 	}
 );
 
