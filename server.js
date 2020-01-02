@@ -13,13 +13,15 @@ var cookieParser = require('cookie-parser');
 var BasicStrategy = require('passport-http').BasicStrategy;
 var LocalStrategy = require('passport-local').Strategy;
 var PassportOAuthBearer = require('passport-http-bearer');
+var morgan = require('morgan');
+var cookieSession = require('cookie-session');
 
 var oauthServer = require('./oauth');
 
 
 var port = (process.env.VCAP_APP_PORT || process.env.PORT || 3000);
 var host = (process.env.VCAP_APP_HOST || '0.0.0.0');
-var mongo_url = process.env.MONGO_URL;
+var mongo_url = process.env.MONGO_URL || 'mongodb://localhost/users';
 
 console.log(mongo_url);
 mongoose.Promise = global.Promise;
@@ -77,6 +79,9 @@ app.set('view engine', 'ejs');
 app.enable('trust proxy');
 app.use(morgan("combined"));
 app.use(cookieParser(cookieSecret));
+app.use(cookieSession({
+	keys: ['secret1', 'secret2']
+}));
 app.use(flash());
 app.use(session({
   // genid: function(req) {
