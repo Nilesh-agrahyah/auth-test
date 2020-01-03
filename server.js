@@ -298,6 +298,7 @@ app.post('/auth/exchange',function(req,res,next){
 app.post('/command',
 	passport.authenticate('bearer', { session: false }),
 	function(req,res,next){
+		console.log('Entered');
 		console.log(req.user);
 		console.log(req.body);
 		res.send({userData: req.user});
