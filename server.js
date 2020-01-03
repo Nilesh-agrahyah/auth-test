@@ -78,12 +78,12 @@ var app = express();
 app.set('view engine', 'ejs');
 app.enable('trust proxy');
 app.use(morgan("combined"));
-// app.use(cookieParser(cookieSecret));
-app.use(cookieSession({
-	keys: ['secret1', 'secret2']
-}));
+app.use(cookieParser(cookieSecret));
+// app.use(cookieSession({
+// 	keys: ['secret1', 'secret2']
+// }));
 app.use(flash());
-/* app.use(session({
+app.use(session({
   // genid: function(req) {
   //   return genuuid() // use UUIDs for session IDs
   // },
@@ -93,7 +93,7 @@ app.use(flash());
   cookie: {
   	secure: true
   }
-})); */
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
