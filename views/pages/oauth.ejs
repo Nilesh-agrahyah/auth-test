@@ -8,7 +8,7 @@
 </head>
 <body>
 
-    <div class="card text-center">
+    <div class="card text-center" style="width: 50%; margin: auto;">
         <div class="card-header">
             <h1>Connect to <%= application.title %></h1>
         </div>
@@ -23,19 +23,26 @@
                 <input type="hidden" name="scope" value="<%= scope.join(',') %>">
         
                 <div class="">
-                    <p><%= application.title %> requires permission to:</p>
-                    <ul>
+                    <div class="alert alert-danger">
+                        <p><%= application.title %> requires permission to:</p>
+                    <ul style="list-style-type:none;">
                         <% scope.forEach(function(i){ %>
-                            <li><%= map[i] %></li>
+                            <li ><%= map[i] %></li>
                         <% });%>
                     </ul>
+                    </div>
+                    
         
                     <% if (user) { %>
                         <p>Click <em>Authorise</em> to allow this app access</p>
                     <% } else { %>
-                        <p>Please sign in to allow this app access</p>
+                        
+
+                        
+                        <p>Please sign in to your Honda Connect account to allow access:</p>                        
                     <% } %>
-                <div>
+                    <div class="">
+                    
         
                 <% if (user) { %>
                     <div class="form-group">
@@ -55,9 +62,10 @@
                     <div>
                         <input class="btn btn-primary" type="submit" value="Authorise">
                     </div>
+                </div>
                 <% } %>
             </form>
-
+            <p class="alert alert-warning">Your credentials won't be shared with app!</p>
           </p>
         </div>
         <div class="card-footer text-muted">
@@ -72,3 +80,6 @@
 	
 </body>
 </html>
+
+
+<span class="glyphicon glyphicon-star" aria-hidden="true"></span>

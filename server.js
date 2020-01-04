@@ -232,8 +232,8 @@ app.get('/auth/start',oauthServer.authorize(function(applicationID, redirectURI,
 }),function(req,res){
 	var scopeMap = {
 		// ... display strings for all scope variables ...
-		access_devices: 'access you devices',
-		create_devices: 'create new devices'
+		access_devices: 'ACCESS USER PROFILE DETAILS',
+		create_devices: 'create new devices.'
 	};
 
 	res.render('pages/oauth', {
