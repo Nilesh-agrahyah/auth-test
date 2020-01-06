@@ -45,9 +45,10 @@
         
                 <% if (user) { %>
                     <div class="form-group">
-                        <p>Signed in as <strong><%= user.username%></strong>.</p>
-                        <a href="/logout?next=<%= currentURL %>">Not </a><%= user.username %>?
-                        <input type="submit" value="Authorise">
+                        <p>Signed in as <strong><%= user.username%></strong>.</p><br>
+                        <input type="submit" class="btn btn-primary" value="Authorise"><br>
+                        <a href="/logout?next=<%= currentURL %>">Not <%= user.username %> </a>?
+                        
                     </div>
                 <% } else { %>
                     <div class="form-group">
