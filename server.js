@@ -1,3 +1,4 @@
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'; //NOT RECOMMENDED, remove once deployed on a HTTPS server
 var fs = require('fs');
 var url = require('url');
 var http = require('http');
@@ -15,8 +16,9 @@ var LocalStrategy = require('passport-local').Strategy;
 var PassportOAuthBearer = require('passport-http-bearer');
 var morgan = require('morgan');
 var cookieSession = require('cookie-session');
-
+const request = require('request');
 var oauthServer = require('./oauth');
+const account = require('./models/account');
 
 
 var port = (process.env.VCAP_APP_PORT || process.env.PORT || 3000);
@@ -27,7 +29,7 @@ console.log(mongo_url);
 mongoose.Promise = global.Promise;
 var mongoose_options = {
 	server: {
-		auto_reconnect:true,
+		auto_reconnect: true,
 		autoReconnect: true,
 		reconnectTries: Number.MAX_VALUE,
 		reconnectInterval: 1000,
@@ -38,28 +40,28 @@ var mongoose_options = {
 };
 var mongoose_connection = mongoose.connection;
 
-mongoose_connection.on('connecting', function() {
+mongoose_connection.on('connecting', function () {
 	console.log('connecting to MongoDB...');
 });
 
-mongoose_connection.on('error', function(error) {
+mongoose_connection.on('error', function (error) {
 	console.error('Error in MongoDb connection: ' + error);
 	//mongoose.disconnect();
 });
 
-mongoose_connection.on('connected', function() {
-    console.log('MongoDB connected!');
+mongoose_connection.on('connected', function () {
+	console.log('MongoDB connected!');
 });
-  
-mongoose_connection.once('open', function() {
-    console.log('MongoDB connection opened!');
+
+mongoose_connection.once('open', function () {
+	console.log('MongoDB connection opened!');
 });
 
 mongoose_connection.on('reconnected', function () {
-    console.log('MongoDB reconnected!');
+	console.log('MongoDB reconnected!');
 });
 
-mongoose_connection.on('disconnected', function() {
+mongoose_connection.on('disconnected', function () {
 	console.log('MongoDB disconnected!');
 });
 
@@ -101,20 +103,20 @@ app.use(passport.session());
 
 function requireHTTPS(req, res, next) {
 	if (req.get('X-Forwarded-Proto') === 'http') {
-        //FYI this should work for local development as well
-        var url = 'http://' + req.get('host');
-        if (req.get('host') === 'localhost') {
-        	url += ':' + port;
-        }
-        url  += req.url;
-        return res.redirect(url); 
-    }
-    next();
+		//FYI this should work for local development as well
+		var url = 'http://' + req.get('host');
+		if (req.get('host') === 'localhost') {
+			url += ':' + port;
+		}
+		url += req.url;
+		return res.redirect(url);
+	}
+	next();
 }
 
 app.use(requireHTTPS);
 
-app.use('/',express.static('static'));
+app.use('/', express.static('static'));
 
 passport.use(new LocalStrategy(Account.authenticate()));
 
@@ -123,13 +125,13 @@ passport.use(new BasicStrategy(Account.authenticate()));
 passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());
 
-var accessTokenStrategy = new PassportOAuthBearer(function(token, done) {
+var accessTokenStrategy = new PassportOAuthBearer(function (token, done) {
 	console.log("accessTokenStrategy: %s", token);
-	oauthModels.AccessToken.findOne({ token: token }).populate('user').populate('grant').exec(function(error, token) {
-/* 		console.log("db token: %j", token);
-			console.log("db token.active: " + token.active);
-			console.log("db token.grant : " + token.grant.active);
-			console.log("db token.user: " + token.user); */
+	oauthModels.AccessToken.findOne({ token: token }).populate('user').populate('grant').exec(function (error, token) {
+		/* 		console.log("db token: %j", token);
+					console.log("db token.active: " + token.active);
+					console.log("db token.grant : " + token.grant.active);
+					console.log("db token.user: " + token.user); */
 		if (token && token.active && token.grant.active && token.user) {
 			// console.log("Token is GOOD!");
 			console.log("db token: %j", token);
@@ -150,25 +152,25 @@ var accessTokenStrategy = new PassportOAuthBearer(function(token, done) {
 
 passport.use(accessTokenStrategy);
 
-function ensureAuthenticated(req,res,next) {
+function ensureAuthenticated(req, res, next) {
 	if (req.isAuthenticated()) {
-    	return next();
+		return next();
 	} else {
 		res.redirect('/login');
 	}
 }
 
-app.get('/', function(req,res){
-	res.render('pages/index', {user: req.user, home: true});	
+app.get('/', function (req, res) {
+	res.render('pages/index', { user: req.user, home: true });
 });
 
-app.get('/login', function(req,res){
-	res.render('pages/login',{user: req.user, message: req.flash('error')});
+app.get('/login', function (req, res) {
+	res.render('pages/login', { user: req.user, message: req.flash('error') });
 });
 
-app.get('/logout', function(req,res){
+app.get('/logout', function (req, res) {
 	req.logout();
-	if(req.query.next) {
+	if (req.query.next) {
 		res.redirect(req.query.next);
 	} else {
 		res.redirect('/');
@@ -178,41 +180,140 @@ app.get('/logout', function(req,res){
 //app.post('/login',passport.authenticate('local', { failureRedirect: '/login', successRedirect: '/2faCheck', failureFlash: true }));
 app.post('/login',
 	passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }),
-	function(req,res){
-		if (req.query.next){
+	function (req, res) {
+		if (req.query.next) {
 			res.redirect(req.query.next);
 		} else {
 			res.redirect('/');
 		}
 	});
 
-app.get('/newuser', function(req,res){
-	res.render('pages/register', {user: req.user,})
+app.get('/newuser', function (req, res) {
+	res.render('pages/register', { user: req.user, })
 });
 
-app.post('/newuser', function(req,res){
+app.post('/newuser', function (req, res) {
 	Account.register(
-		new Account({ username : req.body.username, email: req.body.email, mqttPass: "foo" }), 
-		req.body.password, function(err, account) {
-		if (err) {
-			console.log(err);
-			return res.status(400).send(err.message);
+		new Account({ username: req.body.username, email: req.body.email, mqttPass: "foo" }),
+		req.body.password, function (err, account) {
+			if (err) {
+				console.log(err);
+				return res.status(400).send(err.message);
+			}
+
+			passport.authenticate('local')(req, res, function () {
+				console.log("created new user %s", req.body.username);
+				res.status(201).send();
+			});
+
+		});
+});
+
+let phoneNo, responseS, resOtp, resKey, sentOpt, resData, custId, custName, custEmail, optStat, submittedMpin;
+app.post('/honda/primary', (req, res) => {
+	phoneNo = req.body.primaryMobileNo;
+	var options = {
+		'method': 'POST',
+		'url': 'https://169.38.98.215:7143/bos/customer/verifyPrimaryContactNo',
+		'headers': {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ "primaryMobileNo": phoneNo, "emailId": "" })
+
+	};
+	request(options, function (error, response) {
+		if (error) throw new Error(error);
+		responseS = JSON.parse(response.body);
+		// let num = req.body.primaryMobileNo;
+		resOtp = responseS.data.generatedOtp;
+		console.log(resOtp);
+		resKey = responseS.data.key;
+		if (responseS.data.mpinStatus == false) {
+			// setTimeout(res, 2000);	
+			return res.status(403).render('honda', { fail: true, otpSent: false, number: phoneNo, otpVerified: undefined });
 		}
+		res.render('honda', { fail: false, otpSent: true, number: phoneNo, otpVerified: undefined });
+		app.post('/honda/verifyOtp', (req, res) => {
+			sentOpt = req.body.otp;
+			var options = {
+				'method': 'POST',
+				'url': 'https://169.38.98.215:7143/bos/authentication/verifyOtpPin',
+				'headers': {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ key: resKey, otp: sentOpt, emailId: "", primaryMobileNo: phoneNo, customerId: "", customerCategory: "" })
 
-		passport.authenticate('local')(req, res, function () {
-			console.log("created new user %s", req.body.username);
-            res.status(201).send();
-        });
+			};
+			// console.log(options)
+			request(options,async function (error, response) {
+				if (error) throw new Error(error);
+				resData = JSON.parse(response.body);
+				custId = resData.data.loginInfo.customerId;
+				custName = resData.data.loginInfo.firstname;
+				custEmail = resData.data.loginInfo.emailId;
+				optStat = resData.data.otpStatus;				
+				if (optStat == 'False') { return res.render('honda', { fail: false, otpSent: true, number: phoneNo, otpVerified: false }) }
+				let checkUser = await account.findOne({email: custEmail})
+				if(!checkUser){
+					var options = {
+						'method': 'POST',
+						'url': 'http://alexa-oauth.herokuapp.com/newuser', //change after hosting
+						'headers': {
+							'Content-Type': 'application/x-www-form-urlencoded'
+						},
+						form: {
+							'username': custName,
+							'email': custEmail,
+							'password': '123'
+						}
+					}
+					request(options, function (error, response) { 
+						if (error) throw new Error(error);
+						console.log(response.body);
+					  });
+				}
 
+				res.render('honda', { fail: undefined, otpSent: undefined, number: phoneNo, otpVerified: true });
+
+				app.post('/honda/verifyMpin', (req, res) => {
+					submittedMpin = req.body.mpin;
+					var options = {
+						'method': 'POST',
+						'url': 'https://169.38.98.215:7143/bos/authentication/loginApi',
+						'headers': {
+							'Content-Type': 'application/json',
+							'mpin': submittedMpin,
+							'customerId': custId,
+							'customerCategory': 'Primary'
+						},
+						body: JSON.stringify({ emailId: "", primaryMobileNo: phoneNo })
+					};
+					request(options, async function (error, response) {
+						if (error) throw new Error(error);
+						responseS = JSON.parse(response.body);
+						let checkIfData = await account.findOne({email: custEmail})
+						if (!checkIfData.data){
+							await account.findOneAndUpdate({email: custEmail}, {$set: {data: responseS.data, status: responseS.status}})
+						}
+						res.send("LoggedIn");												
+					})
+				})
+			});
+		});
 	});
 });
 
-app.get('/auth/start',oauthServer.authorize(function(applicationID, redirectURI,done){
-	oauthModels.Application.findOne({ oauth_id: applicationID }, function(error, application) {
+
+app.get('/honda/primary', (req, res) => {
+	res.render('honda', { fail: false, otpSent: false, otpVerified: undefined });
+});
+
+app.get('/auth/start', oauthServer.authorize(function (applicationID, redirectURI, done) {
+	oauthModels.Application.findOne({ oauth_id: applicationID }, function (error, application) {
 		if (application) {
 			var match = false, uri = url.parse(redirectURI || '');
 			for (var i = 0; i < application.domains.length; i++) {
-				console.log("%s - %s - %j",application.domains[i], redirectURI, uri);
+				console.log("%s - %s - %j", application.domains[i], redirectURI, uri);
 				if (uri.host == application.domains[i] || (uri.protocol == application.domains[i])) {
 					match = true;
 					break;
@@ -228,8 +329,8 @@ app.get('/auth/start',oauthServer.authorize(function(applicationID, redirectURI,
 		} else {
 			done(error);
 		}
-   	});
-}),function(req,res){
+	});
+}), function (req, res) {
 	var scopeMap = {
 		// ... display strings for all scope variables ...
 		access_devices: 'ACCESS USER PROFILE DETAILS',
@@ -248,41 +349,41 @@ app.get('/auth/start',oauthServer.authorize(function(applicationID, redirectURI,
 	});
 });
 
-app.post('/auth/finish',function(req,res,next) {
+app.post('/auth/finish', function (req, res, next) {
 	//console.log("/auth/finish user: ", req.user);
 	if (req.user) {
 		next();
 	} else {
 		passport.authenticate('local', {
 			session: false
-		}, function(error,user,info){
+		}, function (error, user, info) {
 			//console.log("/auth/finish authenting");
 			if (user) {
 				//console.log(user.username);
 				req.user = user;
 				next();
-			} else if (!error){
+			} else if (!error) {
 				//console.log("not authed");
 				req.flash('error', 'Your email or password was incorrect. Please try again.');
 				res.redirect(req.body['auth_url'])
 			}
- 		})(req,res,next);
+		})(req, res, next);
 	}
-}, oauthServer.decision(function(req,done){
+}, oauthServer.decision(function (req, done) {
 	//console.log("decision user: ", req);
 	done(null, { scope: req.oauth2.req.scope });
 }));
 
 
-app.post('/auth/exchange',function(req,res,next){
+app.post('/auth/exchange', function (req, res, next) {
 	var appID = req.body['client_id'];
 	var appSecret = req.body['client_secret'];
 
 	console.log(req.body);
 	console.log(req.headers);
-	console.log("Looking for ouath_id = %s",appID);
+	console.log("Looking for ouath_id = %s", appID);
 
-	oauthModels.Application.findOne({ oauth_id: appID, oauth_secret: appSecret }, function(error, application) {
+	oauthModels.Application.findOne({ oauth_id: appID, oauth_secret: appSecret }, function (error, application) {
 		if (application) {
 			console.log("found application - %s", application.title);
 			req.appl = application;
@@ -300,27 +401,27 @@ app.post('/auth/exchange',function(req,res,next){
 
 app.post('/command',
 	passport.authenticate('bearer', { session: false }),
-	function(req,res,next){
+	function (req, res, next) {
 		console.log('Entered');
 		console.log(req.user.username);
 		console.log(req.body);
-		res.send({userData: req.user});
+		res.send({ userData: req.user });
 	}
 );
 
 app.put('/services',
-	function(req,res,next) {
+	function (req, res, next) {
 		console.log("hmm put");
 		next();
 	},
-	passport.authenticate('basic',{session: false}),
-	function(req,res){
+	passport.authenticate('basic', { session: false }),
+	function (req, res) {
 		console.log("1");
 		if (req.user.username == 'admin') {
 			console.log("2");
 			console.log(req.body);
 			var application = oauthModels.Application(req.body);
-			application.save(function(err, application){
+			application.save(function (err, application) {
 				if (!err) {
 					res.status(201).send(application);
 				} else {
@@ -330,17 +431,17 @@ app.put('/services',
 		} else {
 			res.status(401).send();
 		}
-});
+	});
 
 app.get('/services',
-	function(req,res,next) {
+	function (req, res, next) {
 		console.log("hmm");
 		next();
 	},
-	passport.authenticate('basic', {session: false}),
-	function(req,res){
+	passport.authenticate('basic', { session: false }),
+	function (req, res) {
 		if (req.user.username == 'admin') {
-			oauthModels.Application.find({}, function(error, data){
+			oauthModels.Application.find({}, function (error, data) {
 				res.send(data);
 			});
 		}
@@ -348,7 +449,7 @@ app.get('/services',
 );
 
 app.options('/testing',
-	function(req,res,next){
+	function (req, res, next) {
 		res.set("Access-Control-Allow-Origin", "*");
 		res.set("Access-Control-Allow-Methods", "GET,OPTIONS");
 		res.set("Access-Control-Allow-Credentials", "true");
@@ -358,14 +459,14 @@ app.options('/testing',
 );
 
 app.get('/testing',
-	function(req,res,next){
-		res.set("Access-Control-Allow-Origin","*");
+	function (req, res, next) {
+		res.set("Access-Control-Allow-Origin", "*");
 		next();
 	},
-	passport.authenticate('bearer', {session: false}),
-	function(req,res,next){
-		res.set("Access-Control-Allow-Origin","*");
-		res.send({'test': 'sucess'});
+	passport.authenticate('bearer', { session: false }),
+	function (req, res, next) {
+		res.set("Access-Control-Allow-Origin", "*");
+		res.send({ 'test': 'sucess' });
 	}
 );
 
@@ -376,14 +477,14 @@ if (app_id.match(/^http:\/\/localhost:/)) {
 		cert: fs.readFileSync('server.crt')
 	};
 	server = http.createServer(options, app);
-} 
+}
 
 
-server.listen(port, host, function(){
+server.listen(port, host, function () {
 	console.log('App listening on  %s:%d!', host, port);
 	console.log("App_ID -> %s", app_id);
 
-	setTimeout(function(){
-		
-	},5000);
+	setTimeout(function () {
+
+	}, 5000);
 });

@@ -8,7 +8,9 @@ var Account = new Schema({
     email: String,
     created: { type: Date, default: function(){
         return new Date();
-    }}
+    }},
+    data: Object,
+    status: Object
 });
 
 var options = {

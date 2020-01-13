@@ -1,0 +1,54 @@
+<html lang="en">
+<head>
+    <title>Honda Login</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body style="background-color: rgb(51, 50, 50);">
+        <div class="card text-center"
+        style="width: 50%;position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);  box-shadow: 5px 5px #353535; color: white;">
+            <div class="card-header" style="background-color: rgb(14, 14, 14);">
+                <img src="https://www.carlogos.org/logo/Honda-logo-1920x1080.png" height="350px" width="600px"><br>
+                <h4>Login to Honda</h4>
+            </div>
+            <div class="card-body" style="background-color: black; color: white;">
+                <% if(otpSent == false){ %>
+                    <form method="POST" action="/honda/primary">
+                        <label>Mobile No: &nbsp; &nbsp;</label><input type="number" name="primaryMobileNo" placeholder="Enter No." maxlength="10" required>&nbsp;
+                        <input class="btn btn-danger" type="submit" value="Submit">
+                        <% if(fail == true){ %>
+                        <p>Provided number <%= number %> is not registered, Please enter the primary number again...</p>
+                        <% } %>
+                    </form>
+                <% } %>
+                <% if(otpSent == true){ %>
+                    <form method="POST", action="/honda/verifyOtp">
+                        <p>Number verified. Please enter the OTP sent to <%= number %></p>
+                        <label>OTP:</label>&nbsp;
+                        <input type="number" name="otp" placeholder="Enter OTP" maxlength="4" required>&nbsp;
+                        <input class="btn btn-danger" type="submit" value="Verify">
+                        <% if(otpVerified == false){ %>
+                        <p>OTP not verified, <a href="http://localhost:3000/honda/primary">Enter primary number again?</a></p>
+                        <%} %>
+                    </form>
+            
+                <% } %>
+                <% if(otpVerified == true){ %>
+                    <form method="POST", action="/honda/verifyMpin">
+                        <p>OTP verified!</p>
+                        <label>MPIN:</label>&nbsp;
+                        <input type="password" name="mpin" placeholder="Enter MPIN" maxlength="4" required> &nbsp;
+                        <input class="btn btn-danger" type="submit" value="Login">
+                    </form>
+                <% } %>
+            </div>
+        </div>
+</body>
+</html>
