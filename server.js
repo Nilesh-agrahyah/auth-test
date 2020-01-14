@@ -182,7 +182,7 @@ app.get('/logout', function (req, res) {
 app.post('/login',
 	passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }),
 	function (req, res) {
-		console.log("value of req in  /login" + req)
+		//console.log("value of req in  /login" + req)
 		console.log("value of req in  /login" + req.query)
 		console.log("value of req in  /login" + req.query.next)
 		if (req.query.next) {
