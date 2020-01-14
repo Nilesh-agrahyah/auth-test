@@ -185,7 +185,7 @@ app.post('/login',
 		if (req.query.next) {
 			res.redirect(req.query.next);
 		} else {
-			res.send(`https://alexa-oauth.herokuapp.com:${port}/auth/start`);
+			res.send(`https://alexa-oauth.herokuapp.com/auth/start`);
 		}
 	});
 
@@ -264,7 +264,7 @@ app.post('/honda/primary', (req, res) => {
 				if (!checkUser) {
 					var options = {
 						'method': 'POST',
-						'url': `https://alexa-oauth.herokuapp.com:${port}/newuser`,
+						'url': `https://alexa-oauth.herokuapp.com/newuser`,
 						'headers': {
 							'Content-Type': 'application/x-www-form-urlencoded'
 						},
@@ -303,7 +303,7 @@ app.post('/honda/primary', (req, res) => {
 							console.log("account " + account)
 							let checkIfData = await account.findOne({ email: custEmail })
 							console.log("value of checkIfData" + checkIfData) 
-							if (!checkIfData.data) {
+							if (checkIfData == null) {
 
 								await account.findOneAndUpdate({ email: custEmail }, { $set: { data: responseS.data, status: responseS.status, accessToken: response.headers.refreshtoken, refreshToken: response.headers.accesstoken } })
 							}
@@ -326,7 +326,7 @@ app.post('/honda/primary', (req, res) => {
 
 							var options = {
 								'method': 'POST',
-								'url': `https://alexa-oauth.herokuapp.com:${port}/login`,
+								'url': `https://alexa-oauth.herokuapp.com/login`,
 								'headers': {
 									'Content-Type': 'application/x-www-form-urlencoded'
 								},
