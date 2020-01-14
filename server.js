@@ -417,6 +417,7 @@ app.get('/auth/start', oauthServer.authorize(function (applicationID, redirectUR
 });
 
 app.post('/auth/finish', function (req, res, next) {
+	console.log("/auth/finish inside");
 	if (req.user) {
 		next();
 	} else {
