@@ -342,7 +342,13 @@ app.post('/honda/primary', (req, res) => {
 								// res.redirect(`/auth/start?client_id=${clientId}&response_type=${responseType}&redirect_uri=${redirectURI}&scope=${scope}`);
 								// res.send(body);
 								console.log("value of login response after post" + JSON.stringify(body));
-								res.redirect(`${response.body}?scope=${scope}&client_id=${clientId}&redirect_uri=${redirectURI}&response_type=${responseType}&State=${state}`)							
+							
+							
+							
+							
+								res.redirect(`${response.body}?scope=${scope}&client_id=${clientId}&redirect_uri=${redirectURI}&response_type=${responseType}&State=${state}`)	
+								
+								
 							});
 						}
 						else {
