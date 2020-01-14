@@ -439,7 +439,7 @@ app.post('/auth/finish', function (req, res, next) {
 	}
 }, oauthServer.decision(function (req, done) {
 	console.log("decision user: ", req);
-	done(null, { scope: req.oauth2.req.scope},{state = req.query.state });
+	done(null, { scope: req.oauth2.req.scope});
 }));
 
 
