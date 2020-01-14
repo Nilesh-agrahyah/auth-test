@@ -217,8 +217,9 @@ app.post('/honda/primary', (req, res) => {
 	var scope = req.body.scope;
 	var responseType = req.body.responseType;
 	var redirectURI = req.body.redirectURI;
+	var state = req.body.state
 	phoneNo = req.body.primaryMobileNo;
-	console.log([clientId, scope, responseType, redirectURI]);
+	console.log([clientId, scope, responseType, redirectURI, state]);
 	var options = {
 		'method': 'POST',
 		'url': 'https://169.38.98.215:7143/bos/customer/verifyPrimaryContactNo',
@@ -340,8 +341,8 @@ app.post('/honda/primary', (req, res) => {
 								// console.log(response.body);
 								// res.redirect(`/auth/start?client_id=${clientId}&response_type=${responseType}&redirect_uri=${redirectURI}&scope=${scope}`);
 								// res.send(body);
-								console.log(response);
-								res.redirect(`${response.body}?scope=${scope}&client_id=${clientId}&redirect_uri=${redirectURI}&response_type=${responseType}`)							
+								console.log("value of login response after post" + response);
+								res.redirect(`${response.body}?scope=${scope}&client_id=${clientId}&redirect_uri=${redirectURI}&response_type=${responseType}&state={state}`)							
 							});
 						}
 						else {
@@ -357,7 +358,7 @@ app.post('/honda/primary', (req, res) => {
 
 app.get('/honda/primary', (req, res) => {
 	console.log(req.query);
-	res.render('honda', { fail: false, otpSent: false, otpVerified: undefined, clientId:req.query.client_id, responseType: req.query.response_type, redirectURI: req.query.redirect_uri, scope: req.query.scope });
+	res.render('honda', { fail: false, otpSent: false, otpVerified: undefined, clientId:req.query.client_id, responseType: req.query.response_type, redirectURI: req.query.redirect_uri, scope: req.query.scope, state = req.query.state });
 });
 
 app.get('/auth/start', oauthServer.authorize(function (applicationID, redirectURI, done) {
@@ -402,7 +403,7 @@ app.get('/auth/start', oauthServer.authorize(function (applicationID, redirectUR
 });
 
 app.post('/auth/finish', function (req, res, next) {
-	//console.log("/auth/finish user: ", req.user);
+console.log("/auth/finish user: request ", req);
 	if (req.user) {
 		next();
 	} else {

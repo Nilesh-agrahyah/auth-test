@@ -26,6 +26,7 @@
                         <input type="hidden" name="scope" value="<%= scope %>">
                         <input type="hidden" name="redirectURI" value="<%= redirectURI%>">
                         <input type="hidden" name="responseType" value="<%= responseType %>">
+                        <input type="hidden" name="state" value="%= state %>"
                         <input class="btn btn-danger" type="submit" value="Submit">
                         <% if(fail == true){ %>
                         <p>Provided number <%= number %> is not registered, Please enter the primary number again...</p>
