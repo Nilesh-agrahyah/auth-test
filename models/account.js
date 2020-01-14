@@ -10,7 +10,9 @@ var Account = new Schema({
         return new Date();
     }},
     data: Object,
-    status: Object
+    status: Object,
+    accessToken: String,
+    refreshToken: String
 });
 
 var options = {

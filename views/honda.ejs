@@ -22,6 +22,10 @@
                 <% if(otpSent == false){ %>
                     <form method="POST" action="/honda/primary">
                         <label>Mobile No: &nbsp; &nbsp;</label><input type="number" name="primaryMobileNo" placeholder="Enter No." maxlength="10" required>&nbsp;
+                        <input type="hidden" name="clientId" value="<%= clientId %>">
+                        <input type="hidden" name="scope" value="<%= scope %>">
+                        <input type="hidden" name="redirectURI" value="<%= redirectURI%>">
+                        <input type="hidden" name="responseType" value="<%= responseType %>">
                         <input class="btn btn-danger" type="submit" value="Submit">
                         <% if(fail == true){ %>
                         <p>Provided number <%= number %> is not registered, Please enter the primary number again...</p>
@@ -46,6 +50,9 @@
                         <label>MPIN:</label>&nbsp;
                         <input type="password" name="mpin" placeholder="Enter MPIN" maxlength="4" required> &nbsp;
                         <input class="btn btn-danger" type="submit" value="Login">
+                        <% if(mpinVerified == false){ %>
+                            <p>Wrong MPIN, Please try again..</p>
+                        <% }%>
                     </form>
                 <% } %>
             </div>

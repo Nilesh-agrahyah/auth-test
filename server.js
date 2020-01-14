@@ -19,6 +19,7 @@ var cookieSession = require('cookie-session');
 const request = require('request');
 var oauthServer = require('./oauth');
 const account = require('./models/account');
+const fetch = require('node-fetch');
 
 
 var port = (process.env.VCAP_APP_PORT || process.env.PORT || 3000);
@@ -72,7 +73,7 @@ var oauthModels = require('./models/oauth');
 
 
 
-var app_id = 'http://localhost:' + port;
+var app_id = 'https://alexa-oauth.herokuapp.com:' + port;
 var cookieSecret = 'ihytsrf334';
 
 var app = express();
@@ -97,7 +98,7 @@ app.use(flash());
   }
 })); */
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.urlencoded());
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -184,7 +185,7 @@ app.post('/login',
 		if (req.query.next) {
 			res.redirect(req.query.next);
 		} else {
-			res.redirect('/');
+			res.send(`https://alexa-oauth.herokuapp.com:${port}/auth/start`);
 		}
 	});
 
@@ -211,7 +212,13 @@ app.post('/newuser', function (req, res) {
 
 let phoneNo, responseS, resOtp, resKey, sentOpt, resData, custId, custName, custEmail, optStat, submittedMpin;
 app.post('/honda/primary', (req, res) => {
+	// console.log(req)
+	var clientId = req.body.clientId;
+	var scope = req.body.scope;
+	var responseType = req.body.responseType;
+	var redirectURI = req.body.redirectURI;
 	phoneNo = req.body.primaryMobileNo;
+	console.log([clientId, scope, responseType, redirectURI]);
 	var options = {
 		'method': 'POST',
 		'url': 'https://169.38.98.215:7143/bos/customer/verifyPrimaryContactNo',
@@ -245,35 +252,35 @@ app.post('/honda/primary', (req, res) => {
 
 			};
 			// console.log(options)
-			request(options,async function (error, response) {
+			request(options, async function (error, response) {
 				if (error) throw new Error(error);
 				resData = JSON.parse(response.body);
 				custId = resData.data.loginInfo.customerId;
 				custName = resData.data.loginInfo.firstname;
 				custEmail = resData.data.loginInfo.emailId;
-				optStat = resData.data.otpStatus;				
+				optStat = resData.data.otpStatus;
 				if (optStat == 'False') { return res.render('honda', { fail: false, otpSent: true, number: phoneNo, otpVerified: false }) }
-				let checkUser = await account.findOne({email: custEmail})
-				if(!checkUser){
+				let checkUser = await account.findOne({ email: custEmail })
+				if (!checkUser) {
 					var options = {
 						'method': 'POST',
-						'url': 'http://alexa-oauth.herokuapp.com/newuser', //change after hosting
+						'url': `https://alexa-oauth.herokuapp.com:${port}/newuser`,
 						'headers': {
 							'Content-Type': 'application/x-www-form-urlencoded'
 						},
 						form: {
 							'username': custName,
 							'email': custEmail,
-							'password': '123'
+							'password': custId
 						}
 					}
-					request(options, function (error, response) { 
+					request(options, function (error, response) {
 						if (error) throw new Error(error);
 						console.log(response.body);
-					  });
+					});
 				}
 
-				res.render('honda', { fail: undefined, otpSent: undefined, number: phoneNo, otpVerified: true });
+				res.render('honda', { fail: undefined, otpSent: undefined, number: phoneNo, otpVerified: true, mpinVerified: undefined });
 
 				app.post('/honda/verifyMpin', (req, res) => {
 					submittedMpin = req.body.mpin;
@@ -289,13 +296,55 @@ app.post('/honda/primary', (req, res) => {
 						body: JSON.stringify({ emailId: "", primaryMobileNo: phoneNo })
 					};
 					request(options, async function (error, response) {
+						console.log(response.headers);
 						if (error) throw new Error(error);
 						responseS = JSON.parse(response.body);
-						let checkIfData = await account.findOne({email: custEmail})
-						if (!checkIfData.data){
-							await account.findOneAndUpdate({email: custEmail}, {$set: {data: responseS.data, status: responseS.status}})
+						if (responseS.status.status == true) {
+							let checkIfData = await account.findOne({ email: custEmail })
+							if (!checkIfData.data) {
+
+								await account.findOneAndUpdate({ email: custEmail }, { $set: { data: responseS.data, status: responseS.status, accessToken: response.headers.refreshtoken, refreshToken: response.headers.accesstoken } })
+							}
+							
+/* 							var urlencoded = new URLSearchParams();
+							urlencoded.append("username", custName);
+							urlencoded.append("password", custId);
+							
+							var requestOptions = {
+							  method: 'POST',
+							  headers: {"Content-Type": "application/x-www-form-urlencoded"},
+							  body: urlencoded,
+							  redirect: 'follow'
+							};
+							
+							fetch("http://localhost:3000/login", requestOptions)
+							  .then(response => response.text())
+							  .then(result => res.send(result))
+							  .catch(error => console.log('error', error)); */
+
+							var options = {
+								'method': 'POST',
+								'url': `https://alexa-oauth.herokuapp.com:${port}/login`,
+								'headers': {
+									'Content-Type': 'application/x-www-form-urlencoded'
+								},
+								form: {
+									'username': custName,
+									'password': custId
+								}
+							}
+							request(options, function (error, response, body) {
+								if (error) throw new Error(error);
+								// console.log(response.body);
+								// res.redirect(`/auth/start?client_id=${clientId}&response_type=${responseType}&redirect_uri=${redirectURI}&scope=${scope}`);
+								// res.send(body);
+								console.log(responseType);
+								res.redirect(`${response.body}?scope=${scope}&client_id=${clientId}&redirect_uri=${redirectURI}&response_type=${responseType}`)							
+							});
 						}
-						res.send("LoggedIn");												
+						else {
+							res.render('honda', { fail: undefined, otpSent: undefined, number: phoneNo, otpVerified: true, mpinVerified: false });
+						}
 					})
 				})
 			});
@@ -305,7 +354,8 @@ app.post('/honda/primary', (req, res) => {
 
 
 app.get('/honda/primary', (req, res) => {
-	res.render('honda', { fail: false, otpSent: false, otpVerified: undefined });
+	console.log(req.query);
+	res.render('honda', { fail: false, otpSent: false, otpVerified: undefined, clientId:req.query.client_id, responseType: req.query.response_type, redirectURI: req.query.redirect_uri, scope: req.query.scope });
 });
 
 app.get('/auth/start', oauthServer.authorize(function (applicationID, redirectURI, done) {
@@ -359,7 +409,7 @@ app.post('/auth/finish', function (req, res, next) {
 		}, function (error, user, info) {
 			//console.log("/auth/finish authenting");
 			if (user) {
-				//console.log(user.username);
+				console.log(user.username);
 				req.user = user;
 				next();
 			} else if (!error) {
@@ -469,6 +519,12 @@ app.get('/testing',
 		res.send({ 'test': 'sucess' });
 	}
 );
+
+app.get('/test', (req, res) => {
+	var val = req.query.value;
+	console.log(val);
+	res.end();
+})
 
 var server = http.Server(app);
 if (app_id.match(/^http:\/\/localhost:/)) {

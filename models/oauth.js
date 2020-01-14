@@ -25,9 +25,7 @@ var GrantCodeSchema = new Schema({
 });
 
 var AccessTokenSchema = new Schema({
-	token: { type: String, unique: true, default: function() {
-			return uid(124);
-		}
+	token: { type: String, unique: true
 	},
 	user: { type: Schema.Types.ObjectId, ref: 'Account' },
 	application: { type: Schema.Types.ObjectId, ref: 'Application' },
@@ -48,9 +46,7 @@ var AccessTokenSchema = new Schema({
 });
 
 var RefreshTokenSchema = new Schema({
-	token: { type: String, unique: true, default: function(){
-		return uid(124);
-	}},
+	token: { type: String, unique: true},
 	user: { type: Schema.Types.ObjectId, ref: 'Account' },
 	application: { type: Schema.Types.ObjectId, ref: 'Application' }
 });

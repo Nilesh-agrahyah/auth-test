@@ -1,5 +1,7 @@
 var oauth2orize = require('oauth2orize'); 
 var OAuth = require('./models/oauth');
+var User = require('./models/account');
+var request = require('request');
 
 var server = oauth2orize.createServer();
 
@@ -38,16 +40,21 @@ server.grant(oauth2orize.grant.code({
 server.exchange(oauth2orize.exchange.code({
 	userProperty: 'appl'
 }, function(application, code, redirectURI, done) {
-	OAuth.GrantCode.findOne({ code: code }, function(error, grant) {
+	OAuth.GrantCode.findOne({ code: code },  function(error, grant) {
 		if (grant && grant.active && grant.application == application.id) {
+			console.log("grantcode exists")
+			console.log("grant" + JSON.stringify(grant))
 			var now = new Date().getTime();
-			OAuth.AccessToken.findOne({application:application, user: grant.user, expires: { $gt: now}}, function(error,token){
+			OAuth.AccessToken.findOne({application:application, user: grant.user, expires: { $gt: now}}, async function(error,token){
+				console.log("accesstoken schema exists")
+
 				if (token) {
+					console.log("token is there")
 					OAuth.RefreshToken.findOne({application:application, user: grant.user},function(error, refreshToken){
 						if (refreshToken){
 							//var expires = token.expires -  (new Date().getTime());
 							var expires = Math.round((token.expires - (new Date().getTime()))/1000);
-							done(null,token.token, refreshToken.token,{token_type: 'Bearer', expires_in: expires});
+							done(null,	token.token, refreshToken.token,{token_type: 'Bearer', expires_in: expires});
 							console.log("sent expires_in: " + expires);
 						} else {
 							// Shouldn't get here unless there is an error as there
@@ -56,7 +63,14 @@ server.exchange(oauth2orize.exchange.code({
 						}
 					});
 				} else if (!error) {
+
+					console.log("token is not there and no error")
+					console.log("User  "+ JSON.stringify(User))
+					let data = await User.findById(grant.user);
+					if(data){console.log("access token of the user " +data.accessToken)}
+					
 					var token = new OAuth.AccessToken({
+						token : data.accessToken,
 						application: grant.application,
 						user: grant.user,
 						grant: grant,
@@ -70,7 +84,9 @@ server.exchange(oauth2orize.exchange.code({
 							if (refreshToken) {
 								done(error, error ? null : token.token, refreshToken.token, error ? null : { token_type: 'Bearer', expires_in: expires, scope: token.scope});
 							} else if (!error) {
+								console.log("access token of the user " +data.refreshToken)
 								var refreshToken = new OAuth.RefreshToken({
+									token : data.refreshToken,
 									user: grant.user,
 									application: grant.application
 								});
@@ -79,11 +95,14 @@ server.exchange(oauth2orize.exchange.code({
 									done(error, error ? null : token.token, refreshToken.token, error ? null : { token_type: 'Bearer', expires_in: expires, scope: token.scope });
 								});
 							} else {
+								console.log("error" + error)
 								done(error);
 							}
 						});
 					});
+					console.log("value of token "+ JSON.stringify(token))
 				} else {
+					console.log("error" + error)
 					done(error);
 				}
 			});
@@ -100,9 +119,29 @@ server.exchange(oauth2orize.exchange.refreshToken({
 	console.log("Yay! refreshing");
 	OAuth.RefreshToken.findOne({token: token}, function(error, refresh){
 		if (refresh && refresh.application == application.id) {
-			OAuth.GrantCode.findOne({},function(error, grant){
+			OAuth.GrantCode.findOne({},async function(error, grant){
 				if (grant && grant.active && grant.application == application.id){
+					let data = await User.findById(grant.user)
+					var options = {
+						'method': 'GET',
+						'url': 'https://169.38.98.215:7143/bos/authentication/getRefreshToken',
+						'headers': {
+						  'Content-Type': 'application/json',
+						  'customerId': data.data.customerDetails.customerId,
+						  'mpin': '4444',
+						  'accessToken': data.accessToken
+						}
+					   };
+					   request(options, function (error, response) {
+						if (error){
+						console.log(response.body);
+						throw new Error(error);
+						}
+						else{
+					
+
 					var newToken = new OAuth.AccessToken({
+						token :	response.headers.refreshtoken,
 						application: refresh.application,
 						user: refresh.user,
 						grant: grant,
@@ -117,6 +156,8 @@ server.exchange(oauth2orize.exchange.refreshToken({
 							done(error,false);
 						}
 					});
+				}
+				});
 				} else {
 					done(error,null);
 				}
