@@ -184,7 +184,7 @@ app.post('/login',
 	function (req, res) {
 		//console.log("value of req in  /login" + req)
 		
-		console.log("value of req in  /login" + req.query.next)
+	
 		if (req.query.next) {
 
 			res.redirect(req.query.next);
