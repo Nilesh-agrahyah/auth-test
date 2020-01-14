@@ -174,7 +174,7 @@ app.get('/logout', function (req, res) {
 	if (req.query.next) {
 		res.redirect(req.query.next);
 	} else {
-		res.redirect('/');
+		res.redirect('/');  
 	}
 });
 
