@@ -368,7 +368,7 @@ app.get('/honda/primary', (req, res) => {
 });
 
 app.get('/auth/start', oauthServer.authorize(function (applicationID, redirectURI, done) {
-	oauthModels.Application.findOne({ oauth_id: applicationID }, function (error, application) {
+	oauthModels.Application.findOne({ oauth_id: applicationID }, async function (error, application) {
 		if (application) {
 			var match = false, uri = url.parse(redirectURI || '');
 			for (var i = 0; i < application.domains.length; i++) {
@@ -379,6 +379,7 @@ app.get('/auth/start', oauthServer.authorize(function (applicationID, redirectUR
 				}
 			}
 			if (match && redirectURI && redirectURI.length > 0) {
+				let user  = await account.findOne({ email: custEmail })
 				done(null, application, redirectURI);
 			} else {
 				done(new Error("You must supply a redirect_uri that is a domain or url scheme owned by your app."), false);
@@ -390,6 +391,9 @@ app.get('/auth/start', oauthServer.authorize(function (applicationID, redirectUR
 		}
 	});
 }), function (req, res) {
+
+	console.log("value of req in request iside auth start" + req)
+	console.log("value of user in request iside auth start" + req.user)
 	var scopeMap = {
 		// ... display strings for all scope variables ...
 		access_devices: 'ACCESS USER PROFILE DETAILS',
