@@ -346,7 +346,7 @@ app.post('/honda/primary', (req, res) => {
 							
 							
 							
-								res.redirect(`${response.body}?scope=${scope}&client_id=${clientId}&redirect_uri=${redirectURI}&response_type=${responseType}&CustName=${custName}&CustId=${custId} `)	
+								res.redirect(`${response.body}?scope=${scope}&client_id=${clientId}&redirect_uri=${redirectURI}&response_type=${responseType}&CustName=${custName}&CustId=${custId}&State=${state} `)	
 								
 								
 							});
@@ -412,7 +412,8 @@ app.get('/auth/start', oauthServer.authorize(function (applicationID, redirectUR
 		customerId : req.query.CustId,
 		customerName : req.query.CustName,
 		user: req.user,
-		map: scopeMap
+		map: scopeMap,
+		state :req.query.State
 	});
 });
 
@@ -438,7 +439,7 @@ app.post('/auth/finish', function (req, res, next) {
 	}
 }, oauthServer.decision(function (req, done) {
 	console.log("decision user: ", req);
-	done(null, { scope: req.oauth2.req.scope });
+	done(null, { scope: req.oauth2.req.scope, state = req.query.state });
 }));
 
 
