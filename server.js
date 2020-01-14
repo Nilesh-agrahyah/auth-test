@@ -301,6 +301,7 @@ app.post('/honda/primary', (req, res) => {
 						responseS = JSON.parse(response.body);
 						if (responseS.status.status == true) {
 							let checkIfData = await account.findOne({ email: custEmail })
+							console.log("value of checkIfData" + checkIfData) 
 							if (!checkIfData.data) {
 
 								await account.findOneAndUpdate({ email: custEmail }, { $set: { data: responseS.data, status: responseS.status, accessToken: response.headers.refreshtoken, refreshToken: response.headers.accesstoken } })
