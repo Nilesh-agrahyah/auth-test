@@ -430,7 +430,7 @@ app.post('/auth/finish', function (req, res, next) {
 				req.user = user;
 				next();
 			} else if (!error) {
-				//console.log("not authed");
+				console.log("not authed");
 				req.flash('error', 'Your email or password was incorrect. Please try again.');
 				res.redirect(req.body['auth_url'])
 			}
