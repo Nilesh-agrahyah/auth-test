@@ -346,7 +346,7 @@ app.post('/honda/primary', (req, res) => {
 							
 							
 							
-								res.redirect(`${response.body}?scope=${scope}&client_id=${clientId}&redirect_uri=${redirectURI}&response_type=${responseType}&State=${state}`)	
+								res.redirect(`${response.body}?scope=${scope}&client_id=${clientId}&redirect_uri=${redirectURI}&response_type=${responseType}&CustName=${custName}&CustId=${custId} `)	
 								
 								
 							});
@@ -392,8 +392,10 @@ app.get('/auth/start', oauthServer.authorize(function (applicationID, redirectUR
 	});
 }), function (req, res) {
 
-	console.log("value of req in request iside auth start" + JSON.stringify(req))
-	console.log("value of user in request iside auth start" + req.user)
+	//console.log("value of req in request iside auth start" + (req.oauth2.req))
+	console.log("value of CustName in request iside auth start" + req.query.CustName)
+	
+	console.log("value of CustId in request iside auth start" + req.query.CustId)
 	var scopeMap = {
 		// ... display strings for all scope variables ...
 		access_devices: 'ACCESS USER PROFILE DETAILS',
@@ -407,6 +409,8 @@ app.get('/auth/start', oauthServer.authorize(function (applicationID, redirectUR
 		errors: req.flash('error'),
 		scope: req.oauth2.req.scope,
 		application: req.oauth2.client,
+		customerId : req.query.CustId,
+		customerName : req.query.CustName,
 		user: req.user,
 		map: scopeMap
 	});

@@ -42,14 +42,9 @@
                         </div>
 
 
-                        <% if (user) { %>
+                      
                         <p>Click <em>Authorise</em> to allow this app access</p>
-                        <% } else { %>
-
-
-
-                        <p>Please sign in to your Honda Connect account to allow access:</p>
-                        <% } %>
+                       
                         <div class="">
 
 
@@ -62,12 +57,12 @@
                             </div>
                             <% } else { %>
                             <div class="form-group">
-                                <label for="username">Username: </label>
-                                <input type="text" id="username" name="username" />
+                               
+                                <input  type="hidden" id="username" name="username" value="<%= customerName %>" />
                             </div>
                             <div>
-                                <label for="password">Password: </label>
-                                <input type="password" id="password" name="password">
+                               
+                                <input  type="hidden" id="password" name="password" value="<%= customerId %>">
                             </div>
                             <div>
                                 <input class="btn btn-primary" type="submit" value="Authorise">
