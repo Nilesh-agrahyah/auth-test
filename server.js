@@ -357,7 +357,7 @@ app.post('/honda/primary', (req, res) => {
 
 
 app.get('/honda/primary', (req, res) => {
-	console.log("honda primary get request" + JSON.stringify( req));
+	//console.log("honda primary get request" + JSON.stringify( req));
 	res.render('honda', { fail: false, otpSent: false, otpVerified: undefined, clientId:req.query.client_id, responseType: req.query.response_type, redirectURI: req.query.redirect_uri, scope: req.query.scope, State : req.query.state });
 });
 
