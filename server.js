@@ -392,7 +392,7 @@ app.get('/auth/start', oauthServer.authorize(function (applicationID, redirectUR
 	});
 }), function (req, res) {
 
-	console.log("value of req in request iside auth start" + req)
+	console.log("value of req in request iside auth start" + JSON.stringify(req))
 	console.log("value of user in request iside auth start" + req.user)
 	var scopeMap = {
 		// ... display strings for all scope variables ...
