@@ -29,7 +29,7 @@
                     <input type="hidden" name="client_id" value="<%= application.oauth_id %>">
                     <input type="hidden" name="auth_url" value="<%= decodeURIComponent(currentURL) %>">
                     <input type="hidden" name="scope" value="<%= scope%>">
-                 
+                    
 
                     <div class="">
                         <div class="alert alert-danger">
@@ -42,9 +42,14 @@
                         </div>
 
 
-                      
+                        <% if (user) { %>
                         <p>Click <em>Authorise</em> to allow this app access</p>
-                       
+                        <% } else { %>
+
+
+
+                        <p>Please sign in to your Honda Connect account to allow access:</p>
+                        <% } %>
                         <div class="">
 
 
@@ -57,12 +62,12 @@
                             </div>
                             <% } else { %>
                             <div class="form-group">
-                               
-                                <input  type="text" id="username" name="username" value="<%= customerName %>" />
+                                <label for="username">Username: </label>
+                                <input type="text" id="username" name="username" />
                             </div>
                             <div>
-                               
-                                <input  type="text" id="password" name="password" value="<%= customerId %>">
+                                <label for="password">Password: </label>
+                                <input type="password" id="password" name="password">
                             </div>
                             <div>
                                 <input class="btn btn-primary" type="submit" value="Authorise">
