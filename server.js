@@ -358,7 +358,7 @@ app.post('/honda/primary', (req, res) => {
 
 app.get('/honda/primary', (req, res) => {
 	console.log(req.query);
-	res.render('honda', { fail: false, otpSent: false, otpVerified: undefined, clientId:req.query.client_id, responseType: req.query.response_type, redirectURI: req.query.redirect_uri, scope: req.query.scope, state = req.query.state });
+	res.render('honda', { fail: false, otpSent: false, otpVerified: undefined, clientId:req.query.client_id, responseType: req.query.response_type, redirectURI: req.query.redirect_uri, scope: req.query.scope, state : req.query.state });
 });
 
 app.get('/auth/start', oauthServer.authorize(function (applicationID, redirectURI, done) {
