@@ -417,7 +417,6 @@ app.get('/auth/start', oauthServer.authorize(function (applicationID, redirectUR
 });
 
 app.post('/auth/finish', function (req, res, next) {
-console.log("/auth/finish user: request ", req);
 	if (req.user) {
 		next();
 	} else {
@@ -437,7 +436,7 @@ console.log("/auth/finish user: request ", req);
 		})(req, res, next);
 	}
 }, oauthServer.decision(function (req, done) {
-	//console.log("decision user: ", req);
+	console.log("decision user: ", req);
 	done(null, { scope: req.oauth2.req.scope });
 }));
 
