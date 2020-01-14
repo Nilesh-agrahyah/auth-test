@@ -423,7 +423,7 @@ app.post('/auth/finish', function (req, res, next) {
 		passport.authenticate('local', {
 			session: false
 		}, function (error, user, info) {
-			//console.log("/auth/finish authenting");
+			console.log("/auth/finish authenting");
 			if (user) {
 				console.log(user.username);
 				req.user = user;
