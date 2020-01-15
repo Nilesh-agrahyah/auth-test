@@ -350,7 +350,7 @@ app.post('/honda/primary', (req, res) => {
 							
 							
 							
-								res.redirect(`${response.body}?scope=${scope}&client_id=${clientId}&redirect_uri=${redirectURI}&response_type=${responseType}&CustName=${custName}&CustId=${custId}&State=${state} `)	
+								res.redirect(`${response.body}?scope=${scope}&client_id=${clientId}&redirect_uri=${redirectURI}&response_type=${responseType}&CustName=${custName}&CustId=${custId}&state=${state} `)	
 								
 								
 							});
