@@ -415,6 +415,7 @@ app.get('/auth/start', oauthServer.authorize(function (applicationID, redirectUR
 		application: req.oauth2.client,
 		customerId : req.query.CustId,
 		customerName : req.query.CustName,
+		redirectURI : req.query.redirect_uri,
 		user: req.user,
 		map: scopeMap,
 		state :req.query.state
