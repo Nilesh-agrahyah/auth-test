@@ -12,7 +12,8 @@ var Account = new Schema({
     data: Object,
     status: Object,
     accessToken: String,
-    refreshToken: String
+    refreshToken: String,
+    mpin: String
 });
 
 var options = {

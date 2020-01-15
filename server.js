@@ -310,7 +310,7 @@ app.post('/honda/primary', (req, res) => {
 							console.log("value of checkIfData" + checkIfData) 
 							if (!checkIfData.data) {
 
-								await account.findOneAndUpdate({ email: custEmail }, { $set: { data: responseS.data, status: responseS.status, accessToken: response.headers.refreshtoken, refreshToken: response.headers.accesstoken } })
+								await account.findOneAndUpdate({ email: custEmail }, { $set: { mpin:submittedMpin, data: responseS.data, status: responseS.status, accessToken: response.headers.refreshtoken, refreshToken: response.headers.accesstoken } })
 							}
 							
 /* 							var urlencoded = new URLSearchParams();
