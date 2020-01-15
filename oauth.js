@@ -117,10 +117,15 @@ server.exchange(oauth2orize.exchange.refreshToken({
 	userProperty: 'appl'
 }, function(application, token, scope, done){
 	console.log("Yay! refreshing");
+	console.log("token in request" + token)
 	OAuth.RefreshToken.findOne({token: token}, function(error, refresh){
+		console.log("refresh token found")
 		if (refresh && refresh.application == application.id) {
+			console.log("refresh token matches application")
 			OAuth.GrantCode.findOne({},async function(error, grant){
+				console.log("refresh token matches application and grant code found")
 				if (grant && grant.active && grant.application == application.id){
+					console.log("refresh token matches application and grant code found and active")
 					let data = await User.findById(grant.user)
 					var options = {
 						'method': 'GET',
@@ -134,23 +139,24 @@ server.exchange(oauth2orize.exchange.refreshToken({
 					   };
 					   request(options, function (error, response) {
 						if (error){
-						console.log(response.body);
+						console.log("error in getting new token from honda "+ error);
 						throw new Error(error);
 						}
 						else{
 					
-
+							console.log("got response from honda fr refresh " + JSON.stringify(response.headers))
 					var newToken = new OAuth.AccessToken({
 						token :	response.headers.refreshtoken,
 						application: refresh.application,
 						user: refresh.user,
 						grant: grant,
-						scope: grant.scope
+						scope: grant.scope	
 					});
-
+						console.log("saving new token")
 					newToken.save(function(error){
 						var expires = Math.round((newToken.expires - (new Date().getTime()))/1000);
 						if (!error) {
+							console.log("token saved")
 							done(null, newToken.token, refresh.token, {token_type: 'Bearer', expires_in: expires, scope: newToken.scope});
 						} else {
 							done(error,false);
@@ -159,10 +165,13 @@ server.exchange(oauth2orize.exchange.refreshToken({
 				}
 				});
 				} else {
+					console.log("refresh token matches application and grant code not found and active")
 					done(error,null);
 				}
 			});
 		} else {
+			console.log("refresh token does not match application")
+			//console.log("refresh token matches application and grant code found and active")
 			done(error, false);
 		}
 	});

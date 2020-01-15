@@ -13,9 +13,9 @@
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 
-<body>
+<body style="background-color: rgb(51, 50, 50)">
     <div class="card text-center"
-        style="width: 100%;position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+        style="width: 40%;position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); box-shadow: 5px 5px #353535; color: white;">
         <div class="card-header">
             <h1>Connect to <%= application.title %></h1>
         </div>
@@ -47,10 +47,6 @@
                         <% if (user) { %>
                         <p>Click <em>Authorise</em> to allow this app access</p>
                         <% } else { %>
-
-
-
-                        <p>Please sign in to your Honda Connect account to allow access:</p>
                         <% } %>
                         <div class="">
 
@@ -63,25 +59,22 @@
 
                             </div>
                             <% } else { %>
-                            <div class="form-group">
+                                <p>Signed in as <strong><%= customerName %></strong>.</p><br>                 
+                            <div class="form-group"  style="display: none;">
                                 <label for="username">Username: </label>
-                                <input type="text" id="username" name="username" />
+                                <input type="text" id="username" name="username" value="<%= customerName %>"/>
                             </div>
-                            <div>
+                            <div style="display: none;">
                                 <label for="password">Password: </label>
-                                <input type="password" id="password" name="password">
+                                <input type="password" id="password" name="password" value="<%= customerId %>">
                             </div>
                             <div>
-                                <input class="btn btn-primary" type="submit" value="Authorise">
+                                <input class="btn btn-danger" type="submit" value="Authorise">
                             </div>
                         </div>
                         <% } %>
                 </form>
-                <p class="alert alert-warning">Your credentials won't be shared with app!</p>
             </p>
-        </div>
-        <div class="card-footer text-muted">
-            Copyright &COPY; 2020. Aawaz.com. All Rights Reserved.
         </div>
     </div>
 
