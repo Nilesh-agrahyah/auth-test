@@ -133,7 +133,7 @@ server.exchange(oauth2orize.exchange.refreshToken({
 						'headers': {
 						  'Content-Type': 'application/json',
 						  'customerId': data.data.customerDetails.customerId,
-						  'mpin': '4444',
+						  'mpin': '4444', // This has to dynamic
 						  'accessToken': data.refreshToken
 						}
 					   };

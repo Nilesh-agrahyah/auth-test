@@ -32,7 +32,7 @@ var AccessTokenSchema = new Schema({
 	scope: [ { type: String }],
 	expires: { type: Date, default: function(){
 		var today = new Date();
-		var length = 10; // Length (in minutes) of our access token
+		var length = 5; // Length (in minutes) of our access token
 		return new Date(today.getTime() + length*60000);
 	} },
 	active: { type: Boolean, get: function(value) {
