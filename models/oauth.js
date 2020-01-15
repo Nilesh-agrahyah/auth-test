@@ -45,7 +45,7 @@ var AccessTokenSchema = new Schema({
 });
 
 var RefreshTokenSchema = new Schema({
-	token: { type: String, unique: true},
+	token: { type: String},
 	user: { type: Schema.Types.ObjectId, ref: 'Account' },
 	application: { type: Schema.Types.ObjectId, ref: 'Application' }
 });
