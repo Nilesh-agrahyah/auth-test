@@ -507,13 +507,13 @@ app.get('/test', (req, res) => {
 })
 
 var server = http.Server(app);
-if (app_id.match(/^http:\/\/localhost:/)) {
-	var options = {
-		key: fs.readFileSync('server.key'),
-		cert: fs.readFileSync('server.crt')
-	};
-	server = http.createServer(options, app);
-}
+// if (app_id.match(/^http:\/\/localhost:/)) {
+// 	var options = {
+// 		key: fs.readFileSync('server.key'),
+// 		cert: fs.readFileSync('server.crt')
+// 	};
+// 	server = http.createServer(options, app);
+// }
 
 
 server.listen(port, host, function () {
