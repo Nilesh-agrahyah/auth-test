@@ -134,10 +134,10 @@ server.exchange(oauth2orize.exchange.refreshToken({
 						  'Content-Type': 'application/json',
 						  'customerId': data.data.customerDetails.customerId,
 						  'mpin': '4444',
-						  'accessToken': data.accessToken
+						  'accessToken': data.refreshToken
 						}
 					   };
-					   console.log("Value of options: "+options);
+					   console.log("Value of options: "+ JSON.stringify(options));
 					   request(options, function (error, response) {
 						if (error){
 						console.log("error in getting new token from honda "+ error);
