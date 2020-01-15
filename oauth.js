@@ -137,6 +137,7 @@ server.exchange(oauth2orize.exchange.refreshToken({
 						  'accessToken': data.accessToken
 						}
 					   };
+					   console.log("Value of options: "+options);
 					   request(options, function (error, response) {
 						if (error){
 						console.log("error in getting new token from honda "+ error);
@@ -144,7 +145,7 @@ server.exchange(oauth2orize.exchange.refreshToken({
 						}
 						else{
 					
-							console.log("got response from honda fr refresh " + JSON.stringify(response.headers))
+							console.log("got response from honda fr refresh " + JSON.stringify(response))
 					var newToken = new OAuth.AccessToken({
 						token :	response.headers.refreshtoken,
 						application: refresh.application,
