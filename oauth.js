@@ -127,6 +127,7 @@ server.exchange(oauth2orize.exchange.refreshToken({
 				if (grant && grant.active && grant.application == application.id){
 					console.log("refresh token matches application and grant code found and active")
 					let data = await User.findById(grant.user)
+					//TODO: We may need a different API without user MPIN
 					var options = {
 						'method': 'GET',
 						'url': 'https://169.38.98.215:7143/bos/authentication/getRefreshToken',

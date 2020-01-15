@@ -2,15 +2,14 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'; //NOT RECOMMENDED, remove once d
 var fs = require('fs');
 var url = require('url');
 var http = require('http');
+//As this was deployed on Heroku, it requires server.js to use http protocol instead of https, uncomment if your host requires https and change http  to https throughout
 // var https = require('https');
 var flash = require('connect-flash');
 var morgan = require('morgan');
 var express = require('express');
-var session = require('express-session');
 var passport = require('passport');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
 var BasicStrategy = require('passport-http').BasicStrategy;
 var LocalStrategy = require('passport-local').Strategy;
 var PassportOAuthBearer = require('passport-http-bearer');
@@ -19,7 +18,6 @@ var cookieSession = require('cookie-session');
 const request = require('request');
 var oauthServer = require('./oauth');
 const account = require('./models/account');
-const fetch = require('node-fetch');
 
 
 var port = (process.env.VCAP_APP_PORT || process.env.PORT || 3000);
@@ -70,33 +68,17 @@ mongoose.connect(mongo_url, mongoose_options);
 
 var Account = require('./models/account');
 var oauthModels = require('./models/oauth');
-
-
-
-var app_id = 'https://alexa-oauth.herokuapp.com:' + port;
-var cookieSecret = 'ihytsrf334';
+var app_id = 'https://alexa-oauth.herokuapp.com:' + port; //Change according to host used
 
 var app = express();
 
 app.set('view engine', 'ejs');
 app.enable('trust proxy');
 app.use(morgan("combined"));
-// app.use(cookieParser(cookieSecret));
 app.use(cookieSession({
 	keys: ['secret1', 'secret2']
 }));
 app.use(flash());
-/* app.use(session({
-  // genid: function(req) {
-  //   return genuuid() // use UUIDs for session IDs
-  // },
-  secret: cookieSecret,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-  	secure: true
-  }
-})); */
 app.use(bodyParser.json());
 app.use(express.urlencoded());
 app.use(passport.initialize());
@@ -189,7 +171,7 @@ app.post('/login',
 
 			res.redirect(req.query.next);
 		} else {
-			res.send(`https://alexa-oauth.herokuapp.com/auth/start`);
+			res.send(`https://alexa-oauth.herokuapp.com/auth/start`); //Change according to host used
 		}
 	});
 
@@ -311,23 +293,7 @@ app.post('/honda/primary', (req, res) => {
 							if (!checkIfData.data) {
 
 								await account.findOneAndUpdate({ email: custEmail }, { $set: { mpin:submittedMpin, data: responseS.data, status: responseS.status, accessToken: response.headers.refreshtoken, refreshToken: response.headers.accesstoken } })
-							}
-							
-/* 							var urlencoded = new URLSearchParams();
-							urlencoded.append("username", custName);
-							urlencoded.append("password", custId);
-							
-							var requestOptions = {
-							  method: 'POST',
-							  headers: {"Content-Type": "application/x-www-form-urlencoded"},
-							  body: urlencoded,
-							  redirect: 'follow'
-							};
-							
-							fetch("http://localhost:3000/login", requestOptions)
-							  .then(response => response.text())
-							  .then(result => res.send(result))
-							  .catch(error => console.log('error', error)); */
+							}						
 
 							var options = {
 								'method': 'POST',
@@ -342,17 +308,8 @@ app.post('/honda/primary', (req, res) => {
 							}
 							request(options, function (error, response, body) {
 								if (error) throw new Error(error);
-								// console.log(response.body);
-								// res.redirect(`/auth/start?client_id=${clientId}&response_type=${responseType}&redirect_uri=${redirectURI}&scope=${scope}`);
-								// res.send(body);
-								console.log("value of login response after post" + JSON.stringify(body));
-							
-							
-							
-							
-								res.redirect(`${response.body}?scope=${scope}&client_id=${clientId}&redirect_uri=${redirectURI}&response_type=${responseType}&CustName=${custName}&CustId=${custId}&state=${state} `)	
-								
-								
+								console.log("value of login response after post" + JSON.stringify(body));																												
+								res.redirect(`${response.body}?scope=${scope}&client_id=${clientId}&redirect_uri=${redirectURI}&response_type=${responseType}&CustName=${custName}&CustId=${custId}&state=${state} `)																	
 							});
 						}
 						else {
