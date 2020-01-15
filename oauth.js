@@ -155,10 +155,12 @@ server.exchange(oauth2orize.exchange.refreshToken({
 						console.log("saving new token")
 					newToken.save(function(error){
 						var expires = Math.round((newToken.expires - (new Date().getTime()))/1000);
+						console.log("expires " + expires);
 						if (!error) {
 							console.log("token saved")
 							done(null, newToken.token, refresh.token, {token_type: 'Bearer', expires_in: expires, scope: newToken.scope});
 						} else {
+							console.log("token saving error "+error);
 							done(error,false);
 						}
 					});
