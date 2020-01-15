@@ -25,8 +25,7 @@ var GrantCodeSchema = new Schema({
 });
 
 var AccessTokenSchema = new Schema({
-	token: { type: String, unique: true
-	},
+	token: { type: String},
 	user: { type: Schema.Types.ObjectId, ref: 'Account' },
 	application: { type: Schema.Types.ObjectId, ref: 'Application' },
 	grant: { type: Schema.Types.ObjectId, ref: 'GrantCode' },
