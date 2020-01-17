@@ -2,7 +2,7 @@ var oauth2orize = require("oauth2orize");
 var OAuth = require("./models/oauth");
 var User = require("./models/account");
 var request = require("request");
-
+const baseURL = "https://169.38.98.215:7143/bos";
 var server = oauth2orize.createServer();
 
 server.grant(
@@ -195,8 +195,7 @@ server.exchange(
               //TODO: We may need a different API without user MPIN
               var options = {
                 method: "GET",
-                url:
-                  "https://169.38.98.215:7143/bos/authentication/getRefreshToken",
+                url: `${baseURL}/authentication/getRefreshToken`,
                 headers: {
                   "Content-Type": "application/json",
                   customerId: data.data.customerDetails.customerId,
