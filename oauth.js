@@ -191,6 +191,7 @@ server.exchange(
                 "refresh token matches application and grant code found and active"
               );
               let data = await User.findById(grant.user);
+              console.log("data " + data);
               //TODO: We may need a different API without user MPIN
               var options = {
                 method: "GET",
