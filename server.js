@@ -239,22 +239,22 @@ app.post("/honda/primary", (req, res) => {
     body: JSON.stringify({ primaryMobileNo: phoneNo, emailId: "" })
   };
   request(options, function(error, response) {
+    console.log("Response " + JSON.stringify(response));
     if (error) throw new Error(error);
     responseS = JSON.parse(response.body);
+
     // let num = req.body.primaryMobileNo;
     resOtp = responseS.data.generatedOtp;
     console.log(resOtp);
     resKey = responseS.data.key;
     if (responseS.data.mpinStatus == false) {
       // setTimeout(res, 2000);
-      return res
-        .status(403)
-        .render("honda", {
-          fail: true,
-          otpSent: false,
-          number: phoneNo,
-          otpVerified: undefined
-        });
+      return res.status(403).render("honda", {
+        fail: true,
+        otpSent: false,
+        number: phoneNo,
+        otpVerified: undefined
+      });
     }
     res.render("honda", {
       fail: false,
