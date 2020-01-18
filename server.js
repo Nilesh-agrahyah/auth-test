@@ -232,7 +232,7 @@ app.post("/honda/primary", (req, res) => {
   console.log([clientId, scope, responseType, redirectURI, state]);
   var options = {
     method: "POST",
-    url: `${baseURL}/bos/customer/verifyPrimaryContactNo`,
+    url: `${baseURL}/customer/verifyPrimaryContactNo`,
     headers: {
       "Content-Type": "application/json"
     },
@@ -267,7 +267,7 @@ app.post("/honda/primary", (req, res) => {
       sentOpt = req.body.otp;
       var options = {
         method: "POST",
-        url: `${baseURL}/bos/authentication/verifyOtpPin`,
+        url: `${baseURL}/authentication/verifyOtpPin`,
         headers: {
           "Content-Type": "application/json"
         },
@@ -328,7 +328,7 @@ app.post("/honda/primary", (req, res) => {
           submittedMpin = req.body.mpin;
           var options = {
             method: "POST",
-            url: `${baseURL}/bos/authentication/loginApi`,
+            url: `${baseURL}/authentication/loginApi`,
             headers: {
               "Content-Type": "application/json",
               mpin: submittedMpin,
