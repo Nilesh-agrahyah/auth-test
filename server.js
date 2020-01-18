@@ -238,6 +238,7 @@ app.post("/honda/primary", (req, res) => {
     },
     body: JSON.stringify({ primaryMobileNo: phoneNo, emailId: "" })
   };
+  console.log("Options " + JSON.stringify(options));
   request(options, function(error, response) {
     console.log("Response " + JSON.stringify(response));
     if (error) throw new Error(error);
