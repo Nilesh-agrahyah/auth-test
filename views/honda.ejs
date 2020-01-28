@@ -33,11 +33,11 @@
             >
               <% if(otpSent == false){ %>
               <form method="POST" action="/honda/primary">
-                <label>Mobile No. &nbsp; &nbsp;</label
+                <label>Enter Mobile No. &nbsp; &nbsp;</label
                 ><input
                   type="number"
                   name="primaryMobileNo"
-                  placeholder="Enter Mobile Number"
+                  placeholder="Primary Mobile Number"
                   maxlength="10"
                   required
                   class="form-control"
@@ -68,11 +68,11 @@
                 <p>
                   Number verified. Please enter the OTP sent to <%= number %>
                 </p>
-                <label>OTP</label>&nbsp;
+                <label>Enter OTP</label>&nbsp;
                 <input
                   type="number"
                   name="otp"
-                  placeholder="Enter OTP"
+                  placeholder="OTP"
                   maxlength="4"
                   required
                   class="form-control"
@@ -88,11 +88,11 @@
               <% } %> <% if(otpVerified == true){ %>
               <form method="POST" , action="/honda/verifyMpin">
                 <p>OTP verified!</p>
-                <label>mPIN</label>&nbsp;
+                <label>Enter mPIN</label>&nbsp;
                 <input
                   type="password"
                   name="mpin"
-                  placeholder="Enter mPIN"
+                  placeholder="mPIN"
                   maxlength="4"
                   required
                   class="form-control"
