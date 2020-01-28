@@ -7,18 +7,25 @@
 
     <title>Honda Login</title>
   </head>
-  <body style="background-color: rgb(51, 50, 50)">
-    <div class="container-fluid" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white;">
+  <body style="background-image: linear-gradient(black,rgb(63, 63, 63), black);">
+    <div class="container-fluid">
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-          <div class="card text-center">
+          <div class="card text-white" style="background-color: black;">
+            <div class="card-body">
+              <h2>Honda India Skills</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white;">            
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="card">
             <div class="card-header" style="background-color: rgb(14, 14, 14);">
-              <img
-                src="https://www.carlogos.org/logo/Honda-logo-1920x1080.png"
-                class="card-img-top"
-                alt="Responsive image"
-              /><br />
-              <h4>Login to Honda</h4>
+              <h3>Getting Started</h3>
             </div>
             <div
               class="card-body"
@@ -26,11 +33,11 @@
             >
               <% if(otpSent == false){ %>
               <form method="POST" action="/honda/primary">
-                <label>Mobile No &nbsp; &nbsp;</label
+                <label>Mobile No. &nbsp; &nbsp;</label
                 ><input
                   type="number"
                   name="primaryMobileNo"
-                  placeholder="Enter No."
+                  placeholder="Enter Mobile Number"
                   maxlength="10"
                   required
                   class="form-control"
@@ -48,9 +55,9 @@
                   value="<%= responseType %>"
                 />
                 <input type="hidden" name="state" value="<%= state %>" /><br>
-                <input class="btn btn-danger btn-block" type="submit" value="Submit" />
+                <input class="btn btn-danger btn-md" type="submit" value="Submit" />
                 <% if(fail == true){ %>
-                <p>
+                <p class="alert alert-dark">
                   Provided number <%= number %> is not registered, Please enter
                   the primary number again...
                 </p>
@@ -70,9 +77,9 @@
                   required
                   class="form-control"
                 /><br>
-                <input class="btn btn-danger btn-block" type="submit" value="Verify" />
+                <input class="btn btn-danger btn-md" type="submit" value="Verify" />
                 <% if(otpVerified == false){ %>
-                <p>
+                <p class="alert alert-dark">
                   OTP not verified!
                 </p>
                 <%} %>
@@ -81,19 +88,19 @@
               <% } %> <% if(otpVerified == true){ %>
               <form method="POST" , action="/honda/verifyMpin">
                 <p>OTP verified!</p>
-                <label>MPIN</label>&nbsp;
+                <label>mPIN</label>&nbsp;
                 <input
                   type="password"
                   name="mpin"
-                  placeholder="Enter MPIN"
+                  placeholder="Enter mPIN"
                   maxlength="4"
                   required
                   class="form-control"
                 />
                 <br>
-                <input class="btn btn-danger btn-block" type="submit" value="Login" />
+                <input class="btn btn-danger btn-md" type="submit" value="Login" />
                 <% if(mpinVerified == false){ %>
-                <p>Wrong MPIN, Please try again..</p>
+                <p>Wrong mPIN, Please try again..</p>
                 <% }%>
               </form>
               <% } %>
