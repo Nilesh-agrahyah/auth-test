@@ -74,6 +74,7 @@ var app = express();
 
 app.set("view engine", "ejs");
 app.enable("trust proxy");
+app.use(express.static('public'));
 app.use(morgan("combined"));
 app.use(
   cookieSession({

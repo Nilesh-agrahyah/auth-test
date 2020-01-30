@@ -4,37 +4,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
     <title>Honda Login</title>
+    <style>
+      body{
+        background-image: radial-gradient(#3E3E3E, #151515);
+        font-family: 'Roboto';
+        color: #FFFFFF;
+        font-size: 12px;
+        box-shadow: transparent;
+      }
+      .btn{
+        background-color: #CC0000;
+      }
+    </style>
   </head>
-  <body style="background-image: linear-gradient(black,rgb(63, 63, 63),rgb(63, 63, 63), black);">
+  <body>
     <div class="container-fluid">
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-          <div class="card text-white" style="background-color: black;">
+          <div class="card text-center" style="background-color: black;">
             <div class="card-body">
-              <h2>Honda India Skills</h2>
+              <img src="https://alexa-oauth.herokuapp.com/Honda_connect_W-01.jpg" class="img-fluid" style="width: 60%;">
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="container-fluid" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white;">            
+    <div class="container-fluid" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">            
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-          <div class="card">
-            <div class="card-header" style="background-color: rgb(14, 14, 14);">
-              <h3>Getting Started</h3>
-            </div>
+          <div class="card text-center" style="background-color:transparent;">
             <div
               class="card-body"
-              style="background-color: black; color: white;"
+              style="background-color: transparent;"
             >
               <% if(otpSent == false){ %>
               <form method="POST" action="/honda/primary">
-                <label>Enter Mobile No. &nbsp; &nbsp;</label
-                ><input
+                <p style="font-size: 16px;">Enter your mobile number</p>
+                <p style="color: #B1B1B1;">A 4-digit OTP will be sent on SMS</p><input
                   type="number"
                   name="primaryMobileNo"
                   placeholder="Primary Mobile Number"
@@ -55,7 +64,7 @@
                   value="<%= responseType %>"
                 />
                 <input type="hidden" name="state" value="<%= state %>" /><br>
-                <input class="btn btn-danger btn-md" type="submit" value="Submit" />
+                <input class="btn btn-danger btn-block" type="submit" value="Submit"/>
                 <% if(fail == true){ %>
                 <p class="alert alert-dark">
                   Provided number <%= number %> is not registered, Please enter
@@ -65,8 +74,9 @@
               </form>
               <% } %> <% if(otpSent == true){ %>
               <form method="POST" , action="/honda/verifyOtp">
-                <p>
-                  Number verified. Please enter the OTP sent to <%= number %>
+                <p style="font-size: 16px;">Verify and log in</p>
+                <p style="color: #B1B1B1;">
+                  Enter the OTP sent to your mobile <%= number %>
                 </p>
                 <label>Enter OTP</label>&nbsp;
                 <input
@@ -77,7 +87,7 @@
                   required
                   class="form-control"
                 /><br>
-                <input class="btn btn-danger btn-md" type="submit" value="Verify" />
+                <input class="btn btn-danger btn-block" type="submit" value="Verify" />
                 <% if(otpVerified == false){ %>
                 <p class="alert alert-dark">
                   OTP not verified!
@@ -87,8 +97,8 @@
 
               <% } %> <% if(otpVerified == true){ %>
               <form method="POST" , action="/honda/verifyMpin">
-                <p>OTP verified!</p>
-                <label>Enter mPIN</label>&nbsp;
+                <p style="font-size: 16px;">OTP verified!</p>
+                <label style="color: #B1B1B1;">Enter your mPIN</label>&nbsp;
                 <input
                   type="password"
                   name="mpin"
@@ -98,7 +108,7 @@
                   class="form-control"
                 />
                 <br>
-                <input class="btn btn-danger btn-md" type="submit" value="Login" />
+                <input class="btn btn-danger btn-block" type="submit" value="Login" />
                 <% if(mpinVerified == false){ %>
                 <p>Wrong mPIN, Please try again..</p>
                 <% }%>
