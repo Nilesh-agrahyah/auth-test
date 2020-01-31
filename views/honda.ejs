@@ -23,9 +23,9 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-          <div class="card text-center" style="background-color: black;">
+          <div class="card text-center" style="background-color: transparent; margin-top: 50px; border: 0px;">
             <div class="card-body">
-              <img src="https://alexa-oauth.herokuapp.com/Honda_connect_W-01.jpg" class="img-fluid" style="width: 60%;">
+              <img src="http://localhost:3000/honda-connect.png" class="img-fluid" style="width: 60%;">
             </div>
           </div>
         </div>
@@ -46,7 +46,7 @@
                 <p style="color: #B1B1B1;">A 4-digit OTP will be sent on SMS</p><input
                   type="number"
                   name="primaryMobileNo"
-                  placeholder="Primary Mobile Number"
+                  placeholder="Mobile Number"
                   maxlength="10"
                   required
                   class="form-control"
@@ -68,7 +68,7 @@
                 <% if(fail == true){ %>
                 <p class="alert alert-dark">
                   Provided number <%= number %> is not registered, Please enter
-                  the primary number again...
+                  the primary number again.
                 </p>
                 <% } %>
               </form>
@@ -88,6 +88,7 @@
                   class="form-control"
                 /><br>
                 <input class="btn btn-danger btn-block" type="submit" value="Verify" />
+                <input class="btn btn-danger btn-block" style="border:0px; background-color: transparent; color: #B5965E;" type="button" value="Resend OTP" />
                 <% if(otpVerified == false){ %>
                 <p class="alert alert-dark">
                   OTP not verified!
@@ -100,7 +101,7 @@
                 <p style="font-size: 16px;">OTP verified!</p>
                 <label style="color: #B1B1B1;">Enter your mPIN</label>&nbsp;
                 <input
-                  type="password"
+                  type="number"
                   name="mpin"
                   placeholder="mPIN"
                   maxlength="4"

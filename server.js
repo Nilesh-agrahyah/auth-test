@@ -68,7 +68,7 @@ mongoose.connect(mongo_url, mongoose_options);
 
 var Account = require("./models/account");
 var oauthModels = require("./models/oauth");
-var app_id = "https://alexa-oauth.herokuapp.com:" + port; //Change according to host used
+var app_id = "https://alexa-oauth.herokuapp.com/:" + port; //Change according to host used
 
 var app = express();
 
@@ -180,7 +180,7 @@ app.post(
     if (req.query.next) {
       res.redirect(req.query.next);
     } else {
-      res.send(`https://alexa-oauth.herokuapp.com/auth/start`); //Change according to host used
+      res.send(`https://alexa-oauth.herokuapp.com//auth/start`); //Change according to host used
     }
   }
 );
@@ -306,7 +306,7 @@ app.post("/honda/primary", (req, res) => {
         if (!checkUser) {
           var options = {
             method: "POST",
-            url: `https://alexa-oauth.herokuapp.com/newuser`,
+            url: `https://alexa-oauth.herokuapp.com//newuser`,
             headers: {
               "Content-Type": "application/x-www-form-urlencoded"
             },
@@ -367,7 +367,7 @@ app.post("/honda/primary", (req, res) => {
 
               var options = {
                 method: "POST",
-                url: `https://alexa-oauth.herokuapp.com/login`,
+                url: `https://alexa-oauth.herokuapp.com//login`,
                 headers: {
                   "Content-Type": "application/x-www-form-urlencoded"
                 },
