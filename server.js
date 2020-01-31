@@ -255,7 +255,12 @@ app.post("/honda/primary", (req, res) => {
         fail: true,
         otpSent: false,
         number: phoneNo,
-        otpVerified: undefined
+        otpVerified: undefined,
+        clientId: clientId,
+        scope: scope,
+        redirectURI: redirectURI,
+        responseType: responseType,
+        state: state
       });
     }
     res.render("honda", {
