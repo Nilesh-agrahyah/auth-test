@@ -231,6 +231,9 @@ app.post("/honda/primary", (req, res) => {
   var state = req.body.state;
   phoneNo = req.body.primaryMobileNo;
   console.log([clientId, scope, responseType, redirectURI, state]);
+
+
+
   var options = {
     method: "POST",
     url: `${baseURL}/customer/verifyPrimaryContactNo`,
@@ -245,9 +248,19 @@ app.post("/honda/primary", (req, res) => {
     if (error) throw new Error(error);
     responseS = JSON.parse(response.body);
 
-    // let num = req.body.primaryMobileNo;
+    app.post('/resendOtp', (req, res)=>{
+      let resentOtp=req.body.otp;
+      let resentKey=req.body.key;
+      // let num = req.body.primaryMobileNo;
+      resOtp = resentOtp;
+      console.log("Resent OTP: ", resOtp);
+      resKey = resentKey;
+      console.log("Resent New Key: ", resKey);
+      res.send({status:200});
+    })
+
     resOtp = responseS.data.generatedOtp;
-    console.log(resOtp);
+    console.log("OTP: ",resOtp);
     resKey = responseS.data.key;
     if (responseS.data.mpinStatus == false) {
       // setTimeout(res, 2000);

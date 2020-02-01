@@ -1,21 +1,32 @@
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto&display=swap"
+      rel="stylesheet"
+    />
     <title>Honda Login</title>
     <style>
-      body{
-        background-image: radial-gradient(#3E3E3E, #151515);
-        font-family: 'Roboto';
-        color: #FFFFFF;
+      body {
+        background-image: radial-gradient(#3e3e3e, #151515);
+        font-family: "Roboto";
+        color: #ffffff;
         font-size: 12px;
         box-shadow: transparent;
       }
-      .btn{
-        background-color: #CC0000;
+      .btn {
+        background-color: #cc0000;
       }
     </style>
   </head>
@@ -23,27 +34,38 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-          <div class="card text-center" style="background-color: transparent; margin-top: 50px; border: 0px;">
+          <div
+            class="card text-center"
+            style="background-color: transparent; margin-top: 50px; border: 0px;"
+          >
             <div class="card-body">
-              <img src="https://alexa-oauth.herokuapp.com/honda-connect.png" class="img-fluid" style="width: 60%;">
+              <img
+                src="https://alexa-oauth.herokuapp.com/honda-connect.png"
+                class="img-fluid"
+                style="width: 60%;"
+              />
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="container-fluid" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">            
+    <div
+      class="container-fluid"
+      style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"
+    >
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-          <div class="card text-center" style="background-color:transparent; border: 0px;">
-            <div
-              class="card-body"
-              style="background-color: transparent;"
-            >
+          <div
+            class="card text-center"
+            style="background-color:transparent; border: 0px;"
+          >
+            <div class="card-body" style="background-color: transparent;">
               <% if(otpSent == false){ %>
               <form method="POST" action="/honda/primary">
                 <p style="font-size: 16px;">Enter your mobile number</p>
-                <p style="color: #B1B1B1;">A 4-digit OTP will be sent on SMS</p><input
+                <p style="color: #B1B1B1;">A 4-digit OTP will be sent on SMS</p>
+                <input
                   type="number"
                   name="primaryMobileNo"
                   placeholder="Mobile Number"
@@ -63,8 +85,12 @@
                   name="responseType"
                   value="<%= responseType %>"
                 />
-                <input type="hidden" name="state" value="<%= state %>" /><br>
-                <input class="btn btn-danger btn-block" type="submit" value="Submit"/>
+                <input type="hidden" name="state" value="<%= state %>" /><br />
+                <input
+                  class="btn btn-danger btn-block"
+                  type="submit"
+                  value="Submit"
+                />
                 <% if(fail == true){ %>
                 <p class="alert alert-dark">
                   Provided number <%= number %> is not registered, Please enter
@@ -86,9 +112,58 @@
                   maxlength="4"
                   required
                   class="form-control"
-                /><br>
-                <input class="btn btn-danger btn-block" type="submit" value="Verify" />
-                <input class="btn btn-danger btn-block" style="border:0px; background-color: transparent; color: #B5965E;" type="button" value="Resend OTP" />
+                /><br />
+                <input
+                  class="btn btn-danger btn-block"
+                  type="submit"
+                  value="Verify"
+                />
+                <input
+                  class="btn btn-danger btn-block"
+                  id="resend"
+                  style="border:0px; background-color: transparent; color: #B5965E;"
+                  type="button"
+                  value="Resend OTP"
+                />
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+                <script>
+                  $(document).ready(function() {
+                    $("#resend").click(function() {
+                      var number = "<%= number %>";
+                      var settings = {
+                        url:
+                          "https://169.38.98.215:7143/bos/customer/verifyPrimaryContactNo",
+                        method: "POST",
+                        timeout: 0,
+                        headers: {
+                          "Content-Type": "application/json"
+                        },
+                        data: JSON.stringify({
+                          primaryMobileNo: number,
+                          emailId: ""
+                        })
+                      };
+
+                      $.ajax(settings).done(function(response) {
+                        // console.log(response);
+                        var settings = {
+                          url: "https://alexa-oauth.herokuapp.com/resendOtp",
+                          method: "POST",
+                          timeout: 0,
+                          headers: {
+                            "Content-Type": "application/json"
+                          },
+                          data: JSON.stringify({ otp: response.data.generatedOtp, key: response.data.key })
+                        };
+
+                        $.ajax(settings).done(function(response) {
+                          // console.log(response);
+                          alert("OTP sent to your number <%= number %>");
+                        });
+                      });
+                    });
+                  });
+                </script>
                 <% if(otpVerified == false){ %>
                 <p class="alert alert-dark">
                   OTP not verified!
@@ -108,8 +183,12 @@
                   required
                   class="form-control"
                 />
-                <br>
-                <input class="btn btn-danger btn-block" type="submit" value="Login" />
+                <br />
+                <input
+                  class="btn btn-danger btn-block"
+                  type="submit"
+                  value="Login"
+                />
                 <% if(mpinVerified == false){ %>
                 <p>Wrong mPIN, Please try again..</p>
                 <% }%>
@@ -120,8 +199,17 @@
         </div>
       </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>
