@@ -456,7 +456,7 @@ app.get(
           }
         }
         if (match && redirectURI && redirectURI.length > 0) {
-          let user = await account.findOne({ email: data.custEmail });
+          // let user = await account.findOne({ email: data.custEmail });
           done(null, application, redirectURI);
         } else {
           done(
