@@ -405,6 +405,7 @@ app.post("/honda/primary", (req, res) => {
       });
     });
   });
+  phoneNo, responseS, resOtp, resKey, sentOpt, resData, custId, custName, custEmail, optStat, submittedMpin = undefined;
 });
 
 app.get("/honda/primary", (req, res) => {
