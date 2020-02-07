@@ -354,20 +354,31 @@ app.post("/honda/primary", (req, res) => {
 
         app.post("/honda/verifyMpin", (req, res) => {
           let submittedMpin = req.body.mpin;
-          var options = {
-            method: "GET",
-            url: `${baseURL}/external/login`,
+          /*var  options = {
+            method: "POST",
+            url: `${baseURL}/authentication/loginApi`,
             headers: {
               "Content-Type": "application/json",
               mpin: submittedMpin,
-              primaryMobileNo: data.phoneNo
+              customerId: custId,
+              customerCategory: "Primary"
+            },
+            body: JSON.stringify({ emailId: "", primaryMobileNo: data.phoneNo })
+          }; */
+          var options = {
+            'method': 'GET',
+            'url': `${baseURL}/external/login`,
+            'headers': {
+            'mpin': submittedMpin,
+            'Content-Type': 'application/json',
+            'primaryMobileNo': data.phoneNo
             }
-          };
+            };  
+            console.log("Options: ", options);
           request(options, async function(error, response) {
             console.log(response.headers);
             if (error) throw new Error(error);
          let   responseS = JSON.parse(response.body);
-         console.log("resposses: ", JSON.stringify(responseS));
             if (responseS.status.status == true) {
               let checkIfData = await account.findOne({ email: custEmail });
               console.log("value of checkIfData" + checkIfData);
@@ -379,8 +390,8 @@ app.post("/honda/primary", (req, res) => {
                       mpin: submittedMpin,
                       data: responseS.data,
                       status: responseS.status,
-                      accessToken: response.headers.alexarefreshtoken,
-                      refreshToken: response.headers.alexaaccesstoken
+                      accessToken: response.headers.refreshtoken,
+                      refreshToken: response.headers.accesstoken
                     }
                   }
                 );
