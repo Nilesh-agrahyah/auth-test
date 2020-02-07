@@ -221,7 +221,7 @@ let phoneNo,
   custName,
   custEmail,
   optStat,
-  submittedMpin;
+  submittedMpin; 
 app.post("/honda/primary", (req, res) => {
   // console.log(req)
   var clientId = req.body.clientId;
@@ -397,6 +397,7 @@ app.post("/honda/primary", (req, res) => {
                 res.redirect(
                   `${response.body}?scope=${scope}&client_id=${clientId}&redirect_uri=${redirectURI}&response_type=${responseType}&CustName=${custName}&CustId=${custId}&state=${state} `
                 );
+
               });
             } else {
               res.render("honda", {
@@ -482,7 +483,7 @@ app.get(
     );
     var scopeMap = {
       // ... display strings for all scope variables ...
-      access_devices: "ACCESS USER PROFILE DETAILS",
+      access_devices: "Access to Honda Connect account",
       create_devices: "create new devices."
     };
 
