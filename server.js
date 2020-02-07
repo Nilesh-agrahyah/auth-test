@@ -401,7 +401,7 @@ app.post("/honda/primary", (req, res) => {
                   "value of login response after post" + JSON.stringify(body)
                 );
                 res.redirect(
-                  `${response.body}?scope=${scope}&client_id=${clientId}&redirect_uri=${redirectURI}&response_type=${responseType}&CustName=${data.custName}&CustId=${data.custId}&state=${state} `
+                  `${response.body}?scope=${scope}&client_id=${clientId}&redirect_uri=${redirectURI}&response_type=${responseType}&CustName=${data.custName}&CustId=${data.custId}`
                 );
 
               });
@@ -504,8 +504,7 @@ app.get(
       customerName: req.query.CustName,
       redirectURI: req.query.redirect_uri,
       user: req.user,
-      map: scopeMap,
-      state: req.query.state
+      map: scopeMap
     });
   }
 );
