@@ -290,7 +290,7 @@ app.post("/honda/primary", (req, res) => {
       otpVerified: undefined
     });
     app.post("/honda/verifyOtp", (req, res) => {
-      data.sentOpt = req.body.otp;
+      let sentOpt = req.body.otp;
       var options = {
         method: "POST",
         url: `${baseURL}/authentication/verifyOtpPin`,
@@ -299,7 +299,7 @@ app.post("/honda/primary", (req, res) => {
         },
         body: JSON.stringify({
           key: data.resKey,
-          otp: data.sentOpt,
+          otp: sentOpt,
           emailId: "",
           primaryMobileNo: data.phoneNo,
           customerId: "",
