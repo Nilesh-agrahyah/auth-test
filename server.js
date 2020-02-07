@@ -310,12 +310,12 @@ app.post("/honda/primary", (req, res) => {
       console.log("options in verifyotp: " +JSON.stringify(options))
       request(options, async function(error, response) {
         if (error) throw new Error(error);
-        data.resData = JSON.parse(response.body);
+        let resData = JSON.parse(response.body);
+        data.custId = resData.data.loginInfo.customerId;
+        data.custName = resData.data.loginInfo.firstname;
+        data.custEmail = resData.data.loginInfo.emailId;
+        data.optStat = resData.data.otpStatus;
         console.log("data" + JSON.stringify(data))
-        data.custId = data.resData.data.loginInfo.customerId;
-        data.custName = data.resData.data.loginInfo.firstname;
-        data.custEmail = data.resData.data.loginInfo.emailId;
-        data.optStat = data.resData.data.otpStatus;
         if (data.optStat == "False") {
           return res.render("honda", {
             fail: false,
