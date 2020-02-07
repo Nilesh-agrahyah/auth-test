@@ -355,7 +355,7 @@ app.post("/honda/primary", (req, res) => {
         app.post("/honda/verifyMpin", (req, res) => {
           let submittedMpin = req.body.mpin;
           var options = {
-            method: "POST",
+            method: "GET",
             url: `${baseURL}/external/login`,
             headers: {
               "Content-Type": "application/json",
@@ -366,7 +366,7 @@ app.post("/honda/primary", (req, res) => {
           request(options, async function(error, response) {
             console.log(response.headers);
             if (error) throw new Error(error);
-         let   responseS = response.body;
+         let   responseS = JSON.parse(response.body);
          console.log("resposses: ", JSON.stringify(responseS));
             if (responseS.status.status == true) {
               let checkIfData = await account.findOne({ email: custEmail });
