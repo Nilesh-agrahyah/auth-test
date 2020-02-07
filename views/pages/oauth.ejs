@@ -31,7 +31,7 @@
     <div class="container-fluid" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="card text-center"  style="background-color: transparent; font-family: 'Roboto';color: #ffffff; font-size: 16px;">
+                <div class="card text-center"  style="border: 0px; background-color: transparent; font-family: 'Roboto';color: #ffffff; font-size: 16px;">
         <div class="card-body">
             <p class="card-text" >
                 <form action="/auth/finish" method="post">
@@ -66,13 +66,13 @@
                             <% if (user) { %>
                             <div class="form-group">
                                 <p>Signed in as <strong><%= user.username%></strong>.</p><br>
-                                <input type="submit" class="btn btn-primary btn-block" value="Authorise"><br>
+                                <input type="submit" style="display: none;" class="btn btn-primary btn-block" value="Authorise"><br>
                                 <a href="/logout?next=<%= currentURL %>">Not <%= user.username %> </a>?
 
                             </div>
                             <% } else { %>
-                                <p>Signed in as <strong><%= customerName %></strong>.</p><br>                 
-                            <div class="form-group"  style="display: none;">
+                                <p style="display: none;">Signed in as <strong><%= customerName %></strong>.</p><br>                 
+                            <div class="form-group">
                                 <label for="username">Username: </label>
                                 <input type="text" id="username" name="username" value="<%= customerName %>"/>
                             </div>
