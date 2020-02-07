@@ -211,18 +211,10 @@ app.post("/newuser", function(req, res) {
   );
 });
 
-let phoneNo,
-  responseS,
-  resOtp,
-  resKey,
-  sentOpt,
-  resData,
-  custId,
-  custName,
-  custEmail,
-  optStat,
-  submittedMpin; 
+
+
 app.post("/honda/primary", (req, res) => {
+  var phoneNo, responseS, resOtp, resKey, sentOpt, resData, custId, custName, custEmail, optStat, submittedMpin; 
   // console.log(req)
   var clientId = req.body.clientId;
   var scope = req.body.scope;
