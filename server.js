@@ -238,7 +238,7 @@ app.post("/honda/primary", (req, res) => {
   var redirectURI = req.body.redirectURI;
   data.state = req.body.state;
   data.phoneNo = req.body.primaryMobileNo;
-  console.log([data.clientId, scope, responseType, redirectURI, state]);
+  console.log([data.clientId, scope, responseType, redirectURI, data.state]);
 
 
 
