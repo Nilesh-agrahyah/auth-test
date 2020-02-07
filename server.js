@@ -307,7 +307,7 @@ app.post("/honda/primary", (req, res) => {
           customerCategory: ""
         })
       };
-      console.log("options in verifyotp" +options)
+      console.log("options in verifyotp: " +JSON.stringify(options))
       request(options, async function(error, response) {
         if (error) throw new Error(error);
         data.resData = JSON.parse(response.body);
