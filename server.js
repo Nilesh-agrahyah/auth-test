@@ -356,14 +356,12 @@ app.post("/honda/primary", (req, res) => {
           let submittedMpin = req.body.mpin;
           var options = {
             method: "POST",
-            url: `${baseURL}/authentication/loginApi`,
+            url: `${baseURL}/external/login`,
             headers: {
               "Content-Type": "application/json",
               mpin: submittedMpin,
-              customerId: custId,
-              customerCategory: "Primary"
-            },
-            body: JSON.stringify({ emailId: "", primaryMobileNo: data.phoneNo })
+              primaryMobileNo: data.phoneNo
+            }
           };
           request(options, async function(error, response) {
             console.log(response.headers);
@@ -380,8 +378,8 @@ app.post("/honda/primary", (req, res) => {
                       mpin: submittedMpin,
                       data: responseS.data,
                       status: responseS.status,
-                      accessToken: response.headers.refreshtoken,
-                      refreshToken: response.headers.accesstoken
+                      accessToken: response.headers.alexarefreshtoken,
+                      refreshToken: response.headers.alexaaccesstoken
                     }
                   }
                 );
