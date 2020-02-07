@@ -370,7 +370,7 @@ app.post("/honda/primary", (req, res) => {
             if (error) throw new Error(error);
          let   responseS = JSON.parse(response.body);
             if (responseS.status.status == true) {
-              let checkIfData = await account.findOne({ email: data.custEmail });
+              let checkIfData = await account.findOne({ email: custEmail });
               console.log("value of checkIfData" + checkIfData);
               if (!checkIfData.data) {
                 await account.findOneAndUpdate(
