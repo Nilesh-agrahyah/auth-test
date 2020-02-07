@@ -212,7 +212,7 @@ app.post("/newuser", function(req, res) {
 });
 
 class bufferData{
-  constructor(phoneNo, responseS, resOtp, resKey, sentOpt, resData, custId, custName, custEmail, optStat, submittedMpin){
+  constructor(phoneNo, responseS, resOtp, resKey, sentOpt, resData, custId, custName, custEmail, optStat, submittedMpin, clientId){
     this.phoneNo = phoneNo
     this.responseS = responseS
     this.resOtp = resOtp
@@ -224,19 +224,20 @@ class bufferData{
     this.custEmail = custEmail
     this.optStat = optStat
     this.submittedMpin = submittedMpin
+    this.clientId = clientId
   }
 } 
 
 app.post("/honda/primary", (req, res) => {
-  let data = new bufferData(undefined, undefined, undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined);
+  let data = new bufferData(undefined, undefined, undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined, undefined);
   // console.log(req)
-  var clientId = req.body.clientId;
+   data.clientId = req.body.clientId;
   var scope = req.body.scope;
   var responseType = req.body.responseType;
   var redirectURI = req.body.redirectURI;
   var state = req.body.state;
   data.phoneNo = req.body.primaryMobileNo;
-  console.log([clientId, scope, responseType, redirectURI, state]);
+  console.log([data.clientId, scope, responseType, redirectURI, state]);
 
 
 
@@ -275,7 +276,7 @@ app.post("/honda/primary", (req, res) => {
         otpSent: false,
         number: data.phoneNo,
         otpVerified: undefined,
-        clientId: clientId,
+        clientId: data.clientId,
         scope: scope,
         redirectURI: redirectURI,
         responseType: responseType,
@@ -401,7 +402,7 @@ app.post("/honda/primary", (req, res) => {
                   "value of login response after post" + JSON.stringify(body)
                 );
                 res.redirect(
-                  `${response.body}?scope=${scope}&client_id=${clientId}&redirect_uri=${redirectURI}&response_type=${responseType}&CustName=${data.custName}&CustId=${data.custId}`
+                  `${response.body}?scope=${scope}&client_id=${data.clientId}&redirect_uri=${redirectURI}&response_type=${responseType}&CustName=${data.custName}&CustId=${data.custId}`
                 );
 
               });
