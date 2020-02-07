@@ -506,7 +506,8 @@ app.get(
       customerName: req.query.CustName,
       redirectURI: req.query.redirect_uri,
       user: req.user,
-      map: scopeMap
+      map: scopeMap,
+      state: req.query.state
     });
   }
 );
