@@ -212,7 +212,7 @@ app.post("/newuser", function(req, res) {
 });
 
 class bufferData{
-  constructor(phoneNo, responseS, resOtp, resKey, sentOpt, resData, custId, custName, custEmail, optStat, submittedMpin, clientId){
+  constructor(phoneNo, responseS, resOtp, resKey, sentOpt, resData, custId, custName, custEmail, optStat, submittedMpin, clientId, state){
     this.phoneNo = phoneNo
     this.responseS = responseS
     this.resOtp = resOtp
@@ -225,17 +225,18 @@ class bufferData{
     this.optStat = optStat
     this.submittedMpin = submittedMpin
     this.clientId = clientId
+    this.state = state
   }
 } 
 
 app.post("/honda/primary", (req, res) => {
-  let data = new bufferData(undefined, undefined, undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined, undefined);
+  let data = new bufferData(undefined, undefined, undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined, undefined, undefined);
   // console.log(req)
    data.clientId = req.body.clientId;
   var scope = req.body.scope;
   var responseType = req.body.responseType;
   var redirectURI = req.body.redirectURI;
-  var state = req.body.state;
+  data.state = req.body.state;
   data.phoneNo = req.body.primaryMobileNo;
   console.log([data.clientId, scope, responseType, redirectURI, state]);
 
@@ -402,7 +403,7 @@ app.post("/honda/primary", (req, res) => {
                   "value of login response after post" + JSON.stringify(body)
                 );
                 res.redirect(
-                  `${response.body}?scope=${scope}&client_id=${data.clientId}&redirect_uri=${redirectURI}&response_type=${responseType}&CustName=${data.custName}&CustId=${data.custId}`
+                  `${response.body}?scope=${scope}&client_id=${data.clientId}&redirect_uri=${redirectURI}&response_type=${responseType}&CustName=${data.custName}&CustId=${data.custId}&state=${data.state}`
                 );
 
               });
