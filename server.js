@@ -269,7 +269,7 @@ app.post("/honda/primary", (req, res) => {
 
     data.resOtp = data.responseS.data.generatedOtp;
     console.log("OTP: ", data.resOtp);
-    data.resKey = data.responseS.data.key;
+    let resKey = data.responseS.data.key;
     if (data.responseS.data.mpinStatus == false) {
       // setTimeout(res, 2000);
       return res.status(403).render("honda", {
@@ -299,7 +299,7 @@ app.post("/honda/primary", (req, res) => {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          key: data.resKey,
+          key: resKey,
           otp: sentOpt,
           emailId: "",
           primaryMobileNo: data.phoneNo,
