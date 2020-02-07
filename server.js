@@ -367,7 +367,7 @@ app.post("/honda/primary", (req, res) => {
             console.log(response.headers);
             if (error) throw new Error(error);
          let   responseS = response.body;
-         console.log("resposses: ", responseS);
+         console.log("resposses: ", JSON.stringify(responseS));
             if (responseS.status.status == true) {
               let checkIfData = await account.findOne({ email: custEmail });
               console.log("value of checkIfData" + checkIfData);
