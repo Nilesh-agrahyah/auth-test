@@ -274,7 +274,7 @@ app.post("/honda/primary", (req, res) => {
       // setTimeout(res, 2000);
       return res.status(403).render("honda", {
         fail: true,
-        otpSent: false,
+        otpSent: false, 
         number: data.phoneNo,
         otpVerified: undefined,
         clientId: data.clientId,
