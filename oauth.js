@@ -195,12 +195,12 @@ server.exchange(
               //TODO: We may need a different API without user MPIN
               var options = {
                 method: "GET",
-                url: `${baseURL}/authentication/getRefreshToken`,
+                url: `${baseURL}/external/getAlexaRefreshToken`,
                 headers: {
                   "Content-Type": "application/json",
                   customerId: data.data.customerDetails.customerId,
                   mpin: data.mpin,
-                  accessToken: data.refreshToken
+                  alexaaccessToken: data.refreshToken
                 }
               };
               console.log("Value of options: " + JSON.stringify(options));
@@ -214,7 +214,7 @@ server.exchange(
                       JSON.stringify(response)
                   );
                   var newToken = new OAuth.AccessToken({
-                    token: response.headers.refreshtoken,
+                    token: response.headers.alexarefreshtoken,
                     application: refresh.application,
                     user: refresh.user,
                     grant: grant,
