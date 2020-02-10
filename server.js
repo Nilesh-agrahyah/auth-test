@@ -390,8 +390,8 @@ app.post("/honda/primary", (req, res) => {
                       mpin: submittedMpin,
                       data: responseS.data,
                       status: responseS.status,
-                      accessToken: response.headers.refreshtoken,
-                      refreshToken: response.headers.accesstoken
+                      accessToken: response.headers.alexarefreshtoken,
+                      refreshToken: response.headers.alexaaccesstoken
                     }
                   }
                 );
