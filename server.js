@@ -244,7 +244,7 @@ app.post("/honda/primary", (req, res) => {
 
   var options = {
     method: "POST",
-    url: `${baseURL}/customer/verifyPrimaryContactNo`,
+    url: `${baseURL}/external/alexaVerifyPrimaryContactNo`,
     headers: {
       "Content-Type": "application/json"
     },
@@ -294,7 +294,7 @@ app.post("/honda/primary", (req, res) => {
       let sentOpt = req.body.otp;
       var options = {
         method: "POST",
-        url: `${baseURL}/authentication/verifyOtpPin`,
+        url: `${baseURL}/external/alexaVerifyOtpPin`,
         headers: {
           "Content-Type": "application/json"
         },
