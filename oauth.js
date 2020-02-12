@@ -198,7 +198,7 @@ server.exchange(
                 url: `${baseURL}/external/getAlexaRefreshToken`,
                 headers: {
                   "Content-Type": "application/json",
-                  customerId: data.data.customerDetails.customerId,
+                  customerId: data.data.customerDetails.customerId, 
                   alexaaccessToken: data.refreshToken
                 }
               };
