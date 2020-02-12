@@ -268,7 +268,7 @@ app.post("/honda/primary", (req, res) => {
     })
 
     let resOtp = responseS.data.generatedOtp;
-    console.log("OTP: ", resOtp);
+    console.log("OTP: ", resOtp); 
     let resKey = responseS.data.key;
     if (responseS.data.mpinStatus == false) {
       // setTimeout(res, 2000);
