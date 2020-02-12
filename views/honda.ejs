@@ -18,6 +18,14 @@
     />
     <title>Honda Login</title>
     <style>
+      input[type=number] {
+        border: none;
+        background-color: none;
+        outline: 0;
+        font-size: 25px;
+        width: 300px;
+        height: 30px;
+      }
       body {
         background-image: radial-gradient(#3e3e3e, #151515);
         font-family: "Roboto";
@@ -71,9 +79,7 @@
                   placeholder="999999999"
                   maxlength="10"
                   required
-                  style="border: 0px;
-                  background-color: none;
-                  outline: 0;"
+                  class="form-control"
                 />&nbsp;
                 <input type="hidden" name="clientId" value="<%= clientId %>" />
                 <input type="hidden" name="scope" value="<%= scope %>" />
