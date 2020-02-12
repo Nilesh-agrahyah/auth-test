@@ -199,7 +199,6 @@ server.exchange(
                 headers: {
                   "Content-Type": "application/json",
                   customerId: data.data.customerDetails.customerId,
-                  mpin: data.mpin,
                   alexaaccessToken: data.refreshToken
                 }
               };
