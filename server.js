@@ -255,7 +255,7 @@ app.post("/honda/primary", (req, res) => {
     console.log("Response " + JSON.stringify(response));
     if (error) throw new Error(error);
     let responseS = JSON.parse(response.body);
-
+    console.log("response from primary: ", responseS)
     app.post('/resendOtp', (req, res)=>{
       let resentOtp=req.body.otp;
       let resentKey=req.body.key;
