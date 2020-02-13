@@ -115,15 +115,20 @@
                 <p style="color: #B1B1B1;">
                   OTP sent to <%= number %>
                 </p>
-                <label>Enter OTP</label>&nbsp;
-                <input
+                <div id="divOuter">
+                  <div id="divInner">
+                    <input id="partitioned" type="number" maxlength="4" name="otp" required/>
+                  </div>
+                </div>
+                <!-- <input
                   type="number"
                   name="otp"
                   placeholder="OTP"
                   maxlength="4"
                   required
                   class="form-control"
-                /><br />
+                /> -->
+                <br />
                 <input
                   class="btn btn-sm btn-danger"
                   type="submit"
