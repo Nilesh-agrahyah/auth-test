@@ -26,6 +26,7 @@
         color: #B1B1B1;
         width: 300px;
         height: 30px;
+        caret-color: #cc0000;
       }
       body {
         background-image: radial-gradient(#3e3e3e, #151515);
@@ -110,9 +111,9 @@
               </form>
               <% } %> <% if(otpSent == true){ %>
               <form method="POST" , action="/honda/verifyOtp">
-                <p style="font-size: 16px;">Verify and log in</p>
+                <p style="font-size: 16px;">Getting Started</p>
                 <p style="color: #B1B1B1;">
-                  Enter the OTP sent to your mobile <%= number %>
+                  OTP sent to <%= number %>
                 </p>
                 <label>Enter OTP</label>&nbsp;
                 <input
@@ -124,9 +125,9 @@
                   class="form-control"
                 /><br />
                 <input
-                  class="btn btn-danger btn-block"
+                  class="btn btn-sm btn-danger"
                   type="submit"
-                  value="Verify"
+                  value="Next"
                 />
                 <input
                   class="btn btn-danger btn-block"
