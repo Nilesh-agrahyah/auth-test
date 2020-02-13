@@ -18,7 +18,7 @@ var cookieSession = require("cookie-session");
 const request = require("request");
 var oauthServer = require("./oauth");
 const account = require("./models/account");
-const baseURL = "https://169.38.98.215:7143/bos";
+const baseURL = "https://testapi.hondaconnect.in/bos";
 
 var port = process.env.VCAP_APP_PORT || process.env.PORT || 3000;
 var host = process.env.VCAP_APP_HOST || "0.0.0.0";
