@@ -18,7 +18,7 @@
     />
     <title>Honda Login</title>
     <style>
-      input[type=number] {
+      .hondaNum {
         border: none;
         background-color: transparent;
         outline: 0;
@@ -39,6 +39,28 @@
         background-color: #cc0000;
         width:100px;
         padding:5px;
+      }
+      #partitioned {
+        padding-left: 15px;
+        letter-spacing: 42px;
+        border: 0;
+        background-image: linear-gradient(to left, black 70%, rgba(255, 255, 255, 0) 0%);
+        background-position: bottom;
+        background-size: 50px 1px;
+        background-repeat: repeat-x;
+        background-position-x: 35px;
+        width: 220px;
+        min-width: 220px;
+      }
+
+      #divInner{
+        left: 0;
+        position: sticky;
+      }
+
+      #divOuter{
+        width: 190px; 
+        overflow: hidden;
       }
     </style>
   </head>
@@ -83,6 +105,7 @@
                   placeholder="999999999"
                   maxlength="10"
                   required
+                  id="hondaNum"
                 />&nbsp;
                 <input type="hidden" name="clientId" value="<%= clientId %>" />
                 <input type="hidden" name="scope" value="<%= scope %>" />
@@ -117,6 +140,35 @@
                 </p>
                 <div id="divOuter">
                   <div id="divInner">
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+                      var obj = document.getElementById('partitioned');
+                      obj.addEventListener('keydown', stopCarret); 
+                      obj.addEventListener('keyup', stopCarret); 
+
+                      function stopCarret() {
+                        if (obj.value.length > 3){
+                          setCaretPosition(obj, 3);
+                        }
+                      }
+
+                      function setCaretPosition(elem, caretPos) {
+                          if(elem != null) {
+                              if(elem.createTextRange) {
+                                  var range = elem.createTextRange();
+                                  range.move('character', caretPos);
+                                  range.select();
+                              }
+                              else {
+                                  if(elem.selectionStart) {
+                                      elem.focus();
+                                      elem.setSelectionRange(caretPos, caretPos);
+                                  }
+                                  else
+                                      elem.focus();
+                              }
+                          }
+                      }
+                    </script>
                     <input id="partitioned" type="number" maxlength="4" name="otp" required/>
                   </div>
                 </div>
