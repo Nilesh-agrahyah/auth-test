@@ -71,8 +71,8 @@
             <div class="card-body" style="background-color: transparent;">
               <% if(otpSent == false){ %>
               <form method="POST" action="/honda/primary">
-                <p style="font-size: 16px;">Enter your mobile number</p>
-                <p style="color: #B1B1B1;">A 4-digit OTP will be sent on SMS</p>
+                <p style="font-size: 16px;">Getting Started</p>
+                <p style="color: #B1B1B1;">Login via mobile number</p>
                 <input
                   type="number"
                   name="primaryMobileNo"
@@ -96,7 +96,7 @@
                 <input
                   class="btn btn-danger"
                   type="submit"
-                  value="Submit"
+                  value="Next"
                 />
                 <% if(fail == true){ %>
                 <p class="alert alert-dark">
