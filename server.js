@@ -269,8 +269,10 @@ app.post("/honda/primary", (req, res) => {
     })
 
     
-
-    if (responseS.data.mpinStatus && responseS.data.mpinStatus == false || responseS.status == false) {
+    let resOtp = responseS.data.generatedOtp;
+    console.log("OTP: ", resOtp); 
+    let resKey = responseS.data.key;
+    if (responseS.data.mpinStatus == false) {
       // setTimeout(res, 2000);
       return res.status(403).render("honda", {
         fail: true,
@@ -284,9 +286,6 @@ app.post("/honda/primary", (req, res) => {
         state: state
       });
     }
-    let resOtp = responseS.data.generatedOtp;
-    console.log("OTP: ", resOtp); 
-    let resKey = responseS.data.key;
     res.render("honda", {
       fail: false,
       otpSent: true,
