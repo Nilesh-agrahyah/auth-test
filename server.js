@@ -243,10 +243,11 @@ app.get("/otp", (req, res) => {
 
 app.get("/mpin", (req, res) => {
   res.render("honda", {
-    fail: false,
-    otpSent: true,
+    fail: undefined,
+    otpSent: undefined,
     number: data.phoneNo,
-    otpVerified: false
+    otpVerified: true,
+    mpinVerified: undefined
   });
 });
 // Test Ended
