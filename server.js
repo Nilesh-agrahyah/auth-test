@@ -239,7 +239,16 @@ app.get("/otp", (req, res) => {
     number: data.phoneNo,
     otpVerified: undefined
   });
-})
+});
+
+app.get("/mpin", (req, res) => {
+  res.render("honda", {
+    fail: false,
+    otpSent: true,
+    number: data.phoneNo,
+    otpVerified: false
+  });
+});
 // Test Ended
 
 app.post("/honda/primary", (req, res) => {
