@@ -246,17 +246,43 @@
               <form method="POST" , action="/honda/verifyMpin">
                 <p style="font-size: 16px;">OTP verified!</p>
                 <label style="color: #B1B1B1;">Enter your mPIN</label>&nbsp;
-                <input
-                  type="number"
-                  name="mpin"
-                  placeholder="mPIN"
-                  maxlength="4"
-                  required
-                  class="form-control"
-                />
+                <div id="divOuter">
+                  <div id="divInner">
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+                      var obj = document.getElementById('partitioned');
+                      obj.addEventListener('keydown', stopCarret); 
+                      obj.addEventListener('keyup', stopCarret); 
+
+                      function stopCarret() {
+                        if (obj.value.length > 3){
+                          setCaretPosition(obj, 3);
+                        }
+                      }
+
+                      function setCaretPosition(elem, caretPos) {
+                          if(elem != null) {
+                              if(elem.createTextRange) {
+                                  var range = elem.createTextRange();
+                                  range.move('character', caretPos);
+                                  range.select();
+                              }
+                              else {
+                                  if(elem.selectionStart) {
+                                      elem.focus();
+                                      elem.setSelectionRange(caretPos, caretPos);
+                                  }
+                                  else
+                                      elem.focus();
+                              }
+                          }
+                      }
+                    </script>
+                    <input id="partitioned" type="number" maxlength="4" name="mpin" required/>
+                  </div>
+                </div>
                 <br />
                 <input
-                  class="btn btn-danger btn-block"
+                  class="btn btn-danger btn-sm"
                   type="submit"
                   value="Login"
                 />
