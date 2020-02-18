@@ -231,6 +231,17 @@ class bufferData{
 
 let data = new bufferData(undefined, undefined, undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined, undefined, undefined);
 
+//Test purposes
+app.get("/otp", (req, res) => {
+  res.render("honda", {
+    fail: false,
+    otpSent: true,
+    number: data.phoneNo,
+    otpVerified: undefined
+  });
+})
+// Test Ended
+
 app.post("/honda/primary", (req, res) => {
   // console.log(req)
    data.clientId = req.body.clientId;
