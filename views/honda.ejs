@@ -66,6 +66,9 @@
         width: 190px; 
         overflow: hidden;
       }
+      input[type="number"] { 
+        -webkit-text-security: disc !important; 
+      }
     </style>
   </head>
   <body>
@@ -173,7 +176,7 @@
                           }
                       }
                     </script>
-                    <input id="partitioned" type="password" minlength="4" pattern="[0-9]*" inputmode="numeric" size="4" name="otp" required/>
+                    <input id="partitioned" type="number" minlength="4" size="4" name="otp" required/>
                   </div>
                 </div>
                 <!-- <input
