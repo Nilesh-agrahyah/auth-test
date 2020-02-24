@@ -219,8 +219,11 @@
                       if(counter >= 0){
                         $('#time').text(counter);
                       }
-                      while(counter == 0){
+                      if(counter == 0){
                         $('#resend').show();
+                      }
+                      else{
+                        $('#resend').hide();
                       }
                   }, 1000);
 
