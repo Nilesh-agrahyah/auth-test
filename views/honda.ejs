@@ -211,7 +211,7 @@
                 />
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
                 <script>
-                  var counter = 10;
+                  var counter = 5;
                   var interval = setInterval(function() {
                       counter--;
                       // Display 'counter' wherever you want to display it.
@@ -219,16 +219,14 @@
                       if(counter >= 0){
                         $('#time').text(counter);
                       }
+                      if(counter == 0){
+                        $('#resend').show();
+                      }
                   }, 1000);
 
                   $(document).ready(function() {
-                    if(counter == 0){
-                      $("#resend").show();
-                    }
-
-                  $(document).ready(function() {
                     $("#resend").click(function() {
-                      counter = 10;
+                      counter = 5;
                       var number = "<%= number %>";
                       var settings = {
                         url:
