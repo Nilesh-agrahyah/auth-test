@@ -115,7 +115,7 @@
                   maxlength="10"
                   required
                   id="hondaNum"
-                />&nbsp;
+                /> <span id="timer" >5</span>&nbsp;
                 <input type="hidden" name="clientId" value="<%= clientId %>" />
                 <input type="hidden" name="scope" value="<%= scope %>" />
                 <input
@@ -204,6 +204,16 @@
                 />
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
                 <script>
+                  var counter = 5;
+                  var interval = setInterval(function() {
+                      counter--;
+                      // Display 'counter' wherever you want to display it.
+                      
+                      if(counter >= 0){
+                        $('#time').text(counter);
+                      }
+                  }, 1000);
+
                   $(document).ready(function() {
                     setTimeout(function() {
                       $("#resend").show();
@@ -212,6 +222,7 @@
 
                   $(document).ready(function() {
                     $("#resend").click(function() {
+                      counter = 5;
                       var number = "<%= number %>";
                       var settings = {
                         url:
