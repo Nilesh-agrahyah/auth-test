@@ -67,6 +67,10 @@
         width: 190px; 
         overflow: hidden;
       }
+
+      #resend{
+        display: none;
+      }
     </style>
   </head>
   <body>
@@ -200,6 +204,12 @@
                 />
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
                 <script>
+                  $(document).ready(function() {
+                    setTimeout(function() {
+                      $("#resend").show();
+                    }, 5000);
+                  });
+
                   $(document).ready(function() {
                     $("#resend").click(function() {
                       var number = "<%= number %>";
