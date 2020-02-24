@@ -222,7 +222,9 @@
                       if(counter == 0){
                         $('#resend').show();
                       }
-                      $(document).ready(function() {
+                  }, 1000);
+
+                  $(document).ready(function() {
                     $("#resend").click(function() {
                       counter = 5;
                       var number = "<%= number %>";
@@ -258,9 +260,6 @@
                       });
                     });
                   });
-                  }, 1000);
-
-
                 </script>
                 <% if(otpVerified == false){ %>
                 <p class="alert alert-dark">
