@@ -236,7 +236,7 @@ app.get("/otp", (req, res) => {
   res.render("honda", {
     fail: false,
     otpSent: true,
-    number: data.phoneNo,
+    number: 1234567899,
     otpVerified: undefined
   });
 });
