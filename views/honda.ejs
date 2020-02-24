@@ -211,7 +211,7 @@
                 />
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
                 <script>
-                  var counter = 5;
+                  var counter = 10;
                   var interval = setInterval(function() {
                       counter--;
                       // Display 'counter' wherever you want to display it.
@@ -222,14 +222,13 @@
                   }, 1000);
 
                   $(document).ready(function() {
-                    setTimeout(function() {
+                    if(counter == 0){
                       $("#resend").show();
-                    }, 5000);
-                  });
+                    }
 
                   $(document).ready(function() {
                     $("#resend").click(function() {
-                      counter = 5;
+                      counter = 10;
                       var number = "<%= number %>";
                       var settings = {
                         url:
