@@ -180,8 +180,9 @@
                     </script>
                     <input id="partitioned" type="number" minlength="4" size="4" name="otp" required/> 
                   </div>
+                  <span id="time" style="float: right;">5</span>
                 </div>
-                &nbsp; <span id="time">5</span>
+                
                 <!-- <input
                   type="number"
                   name="otp"
@@ -223,6 +224,7 @@
 
                   $(document).ready(function() {
                     $("#resend").click(function() {
+                      $("#resend").hide();
                       counter = 5;
                       var number = "<%= number %>";
                       var settings = {
