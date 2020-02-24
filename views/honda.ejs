@@ -50,8 +50,8 @@
         background-size: 50px 1px;
         background-repeat: repeat-x;
         background-position-x: 35px;
-        width: 220px;
-        min-width: 220px;
+        width: 190px;
+        min-width: 190px;
         caret-color: #cc0000;
         color:#ffffff;
         outline: none;
@@ -147,45 +147,41 @@
                 <p style="color: #B1B1B1;">
                   OTP sent to <%= number %>
                 </p>
-                <div class="row">
-                  <div id="divOuter" class="col-xs-10 col-sm-10 col-md-10 col-lg-10" >
-                    <div id="divInner">
-                      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
-                        var obj = document.getElementById('partitioned');
-                        obj.addEventListener('keydown', stopCarret); 
-                        obj.addEventListener('keyup', stopCarret); 
-  
-                        function stopCarret() {
-                          if (obj.value.length > 3){
-                            setCaretPosition(obj, 3);
-                          }
-                        }
-  
-                        function setCaretPosition(elem, caretPos) {
-                            if(elem != null) {
-                                if(elem.createTextRange) {
-                                    var range = elem.createTextRange();
-                                    range.move('character', caretPos);
-                                    range.select();
-                                }
-                                else {
-                                    if(elem.selectionStart) {
-                                        elem.focus();
-                                        elem.setSelectionRange(caretPos, caretPos);
-                                    }
-                                    else
-                                        elem.focus();
-                                }
-                            }
-                        }
-                      </script>
-                      <input id="partitioned" type="number" minlength="4" size="4" name="otp" required/> 
-                    </div>
-                    
-                  </div>
-                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"><span id="time">5</span></div>
-                </div>
+                <div id="divOuter">
+                  <div id="divInner">
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+                      var obj = document.getElementById('partitioned');
+                      obj.addEventListener('keydown', stopCarret); 
+                      obj.addEventListener('keyup', stopCarret); 
 
+                      function stopCarret() {
+                        if (obj.value.length > 3){
+                          setCaretPosition(obj, 3);
+                        }
+                      }
+
+                      function setCaretPosition(elem, caretPos) {
+                          if(elem != null) {
+                              if(elem.createTextRange) {
+                                  var range = elem.createTextRange();
+                                  range.move('character', caretPos);
+                                  range.select();
+                              }
+                              else {
+                                  if(elem.selectionStart) {
+                                      elem.focus();
+                                      elem.setSelectionRange(caretPos, caretPos);
+                                  }
+                                  else
+                                      elem.focus();
+                              }
+                          }
+                      }
+                    </script>
+                    <input id="partitioned" type="number" minlength="4" size="4" name="otp" required/> 
+                  </div>
+                  <div class="timer"><span id="time" style="float: right;">5</span></div>
+                </div>
                 
                 <!-- <input
                   type="number"
