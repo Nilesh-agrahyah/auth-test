@@ -226,6 +226,7 @@
 
                   $(document).ready(function() {
                     $("#resend").click(function() {
+                      alert("OTP resent");
                       counter = 5;
                       var number = "<%= number %>";
                       var settings = {
@@ -254,8 +255,7 @@
                           data: JSON.stringify({ otp: response.data.generatedOtp, key: response.data.key })
                         };
 
-                        $.ajax(settings).done(function(response) {
-                          alert("OTP resent");
+                        $.ajax(settings).done(function(response) {                        
                           console.log(response);
                         });
                       });
