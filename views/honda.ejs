@@ -19,7 +19,7 @@
         border: none;
         background-color: transparent;
         outline: none;
-        font-size: 25px;
+        font-size: 30px;
         color: #ffffff;
         width: 300px;
         height: 30px;
@@ -29,7 +29,7 @@
         background-image: radial-gradient(#3e3e3e, #151515);
         font-family: "Roboto";
         color: #ffffff;
-        font-size: 12px;
+        font-size: 18px;
         box-shadow: transparent;
       }
       .btn {
@@ -68,10 +68,11 @@
         display: none;
       }
       #time{
-        font-size: 30px;
+        font-size: 25px;
       }
       .timer{
         float: right;
+        padding-right: 40px;
       }
     </style>
   </head>
@@ -108,10 +109,10 @@
             <div class="card-body" style="background-color: transparent;">
               <% if(otpSent == false){ %>
               <form method="POST" action="/honda/primary">
-                <p style="font-size: 16px;">Getting Started</p>
+                <p style="font-size: 26px;">Getting Started</p>
                 <p style="color: #B1B1B1;">Login via mobile number</p>
                 <input
-                  type="number"
+                  type="tel"
                   name="primaryMobileNo"
                   placeholder="999999999"
                   maxlength="10"
