@@ -268,7 +268,8 @@ app.post("/honda/primary", (req, res) => {
     method: "POST",
     url: `${baseURL}/external/alexaVerifyPrimaryContactNo`,
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "Authorization": "Basic YwYzigQsp5v15WmH8SVxgsgQQpJN2Ut9ckapuHN7QEGbUxmLOYRaNRFmS7pkySEk+WEzlMAuWmryrh2UgA=="
     },
     body: JSON.stringify({ primaryMobileNo: data.phoneNo, emailId: "" })
   };
@@ -319,7 +320,8 @@ app.post("/honda/primary", (req, res) => {
         method: "POST",
         url: `${baseURL}/external/alexaVerifyOtpPin`,
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Authorization": "Basic YwYzigQsp5v15WmH8SVxgsgQQpJN2Ut9ckapuHN7QEGbUxmLOYRaNRFmS7pkySEk+WEzlMAuWmryrh2UgA=="
         },
         body: JSON.stringify({
           key: resKey,
@@ -394,7 +396,8 @@ app.post("/honda/primary", (req, res) => {
             'headers': {
             'mpin': submittedMpin,
             'Content-Type': 'application/json',
-            'primaryMobileNo': data.phoneNo
+            'primaryMobileNo': data.phoneNo,
+            "Authorization": "Basic YwYzigQsp5v15WmH8SVxgsgQQpJN2Ut9ckapuHN7QEGbUxmLOYRaNRFmS7pkySEk+WEzlMAuWmryrh2UgA=="
             }
             };  
             console.log("Options: ", options);

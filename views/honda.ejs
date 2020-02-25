@@ -96,7 +96,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </html>
 
     <div
       class="container-fluid"
@@ -120,7 +120,7 @@
                   maxlength="10"
                   required
                   id="hondaNum"
-                /> <span id="timer" >5</span>&nbsp;
+                />
                 <input type="hidden" name="clientId" value="<%= clientId %>" />
                 <input type="hidden" name="scope" value="<%= scope %>" />
                 <input
@@ -184,7 +184,7 @@
                       }
                     </script>
                     <input id="partitioned" type="number" minlength="4" size="4" name="otp" required/>
-                    <div class="timer"><span id="time">5</span>s</div>
+                    <div class="timer"><span id="time">90</span>s</div>
                   </div>
                 </div>
                 
@@ -211,7 +211,7 @@
                 />
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
                 <script>
-                  var counter = 5;
+                  var counter = 90;
                   var interval = setInterval(function() {
                       counter--;
                       // Display 'counter' wherever you want to display it.
@@ -227,7 +227,7 @@
                   $(document).ready(function() {
                     $("#resend").click(function() {
                       alert("OTP resent to <%= number %>");
-                      counter = 5;
+                      counter = 90;
                       var number = "<%= number %>";
                       var settings = {
                         url:
@@ -235,7 +235,8 @@
                         method: "POST",
                         timeout: 0,
                         headers: {
-                          "Content-Type": "application/json"
+                          "Content-Type": "application/json",
+                          "Authorization": "Basic YwYzigQsp5v15WmH8SVxgsgQQpJN2Ut9ckapuHN7QEGbUxmLOYRaNRFmS7pkySEk+WEzlMAuWmryrh2UgA=="
                         },
                         data: JSON.stringify({
                           primaryMobileNo: number,
