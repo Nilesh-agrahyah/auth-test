@@ -219,13 +219,11 @@
                       if(counter >= 0){
                         $('#time').text(counter);
                       }
-                      if(counter == 0){
+                      while(counter == 0){
                         $('#resend').show();
                       }
-                  }, 1000);
 
-                  $(document).ready(function() {
-                    $("#resend").click(function() {
+                      $("#resend").click(function() {
                       alert("OTP resent to <%= number %>");
                       counter = 90;
                       var number = "<%= number %>";
@@ -261,6 +259,10 @@
                         });
                       });
                     });
+                  }, 1000);
+
+                  $(document).ready(function() {
+                    
                   });
                 </script>
                 <% if(otpVerified == false){ %>
