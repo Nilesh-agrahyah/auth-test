@@ -38,16 +38,17 @@
         padding:5px;
       }
       #partitioned {
+        background-color: transparent;
         padding-left: 15px;
         letter-spacing: 42px;
         border: 0;
-        background-image: linear-gradient(to left, black 70%, rgba(255, 255, 255, 0) 0%);
+        background-image: linear-gradient(to left, white 70%, rgba(255, 255, 255, 0) 0%);
         background-position: bottom;
         background-size: 50px 1px;
         background-repeat: repeat-x;
         background-position-x: 35px;
-        width: 220px;
-        min-width: 220px;
+        width: 190px;
+        min-width: 190px;
         caret-color: #cc0000;
         color:#ffffff;
         outline: none;
@@ -60,7 +61,8 @@
       }
 
       #divOuter{
-        overflow: hidden;
+        overflow: visible;
+        width: 190px;
       }
 
       #resend{
@@ -184,7 +186,7 @@ obj.addEventListener('keydown', stopCarret);
 obj.addEventListener('keyup', stopCarret); 
 
 function stopCarret() {
-	if (obj.value.length > 3){
+	if (obj.value.length = 3){
 		setCaretPosition(obj, 3);
 	}
 }
