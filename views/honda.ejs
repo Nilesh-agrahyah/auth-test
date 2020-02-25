@@ -61,7 +61,7 @@
       }
 
       #divOuter{
-        overflow: visible;
+        overflow: hidden;
         width: 190px;
       }
 
@@ -152,12 +152,13 @@
                 <p style="color: #B1B1B1;">
                   OTP sent to <%= number %>
                 </p>
+                <div class="timer"><span id="time">90</span>s</div>
                 <div id="divOuter">
                   <div id="divInner">
                     <input id="partitioned" type="tel" maxlength="4" name="otp" required/>                    
                   </div>
                 </div>
-                <div class="timer"><span id="time">90</span>s</div>
+                
                 
                 <!-- <input
                   type="number"
