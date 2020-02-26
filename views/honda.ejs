@@ -69,13 +69,45 @@
         display: none;
       }
       #time{
-        font-size: 25px;
+        font-size: 15px;
+        color: white;
+          display: inline-block;
+          line-height: 40px;
       }
-      .timer{
-        position: relative;
-        float: right;
+      #countdown {
+      position: relative;
+      height: 40px;
+      width: 40px;
+      text-align: center;
+      float: right;
       }
-    </style>
+svg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  transform: rotateY(-180deg) rotateZ(-90deg);
+}
+
+svg circle {
+  stroke-dasharray: 113px;
+  stroke-dashoffset: 0px;
+  stroke-linecap: round;
+  stroke-width: 2px;
+  stroke: red;
+  fill: none;
+  animation: countdown 90s linear forwards;
+}
+
+@keyframes countdown {
+  from {
+    stroke-dashoffset: 0px;
+  }
+  to {
+    stroke-dashoffset: 113px;
+  }
+}</style>
   </head>
   <body>
     <div class="container-fluid">
@@ -151,7 +183,12 @@
                 <p style="color: #B1B1B1;">
                   OTP sent to <%= number %>
                 </p>
-                <div class="timer"><span id="time">90</span>s</div>
+                <div id="countdown">
+                  <div class="timer"><span id="time">0</span>s</div>
+                  <svg>
+                    <circle r="18" cx="20" cy="20"></circle>
+                  </svg>
+                </div>
                 <div id="divOuter">
                   <div id="divInner">
                     <input id="partitioned" type="tel" maxlength="4" name="otp" required/>                    
