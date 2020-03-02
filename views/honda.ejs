@@ -262,8 +262,6 @@ function setCaretPosition(elem, caretPos) {
                   $(document).ready(function() {
                     $("#resend").click(function() {
                       $("#resend").hide();
-                      var animation = document.getElementById("circleAni");
-                      animation.beginElement();
                       alert("OTP resent to <%= number %>");
                       counter = 90;
                       var number = "<%= number %>";
