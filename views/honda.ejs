@@ -203,7 +203,7 @@ svg {
                 </p>
                 <div id="countdown">
                   <div class="timer"><span id="time">90</span>s</div>
-                  <div class="circleDiv">
+                  <div id="circleDiv">
                     <svg>
                       <circle id="circleAni" r="18" cx="20" cy="20"></circle>
                     </svg>
@@ -282,7 +282,7 @@ function setCaretPosition(elem, caretPos) {
                   $(document).ready(function() {
                     $("#resend").click(function() {
                       $("#resend").hide();
-                      $("#countdown").addClass("svgRepeat circleRepeat");
+                      $("#circleDiv").addClass("svgRepeat circleRepeat");
                       alert("OTP resent to <%= number %>");
                       counter = 90;
                       var number = "<%= number %>";
