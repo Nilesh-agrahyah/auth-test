@@ -262,7 +262,7 @@ function setCaretPosition(elem, caretPos) {
                   $(document).ready(function() {
                     $("#resend").click(function() {
                       $("#resend").hide();
-                      $("#circleAni").css("animation","countdown 90s linear forwards")
+                      $("svg").addClass("circleAni");
                       alert("OTP resent to <%= number %>");
                       counter = 90;
                       var number = "<%= number %>";
