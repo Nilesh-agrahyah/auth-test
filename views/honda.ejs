@@ -90,28 +90,54 @@ svg {
   transform: rotateY(-180deg) rotateZ(-90deg);
 }
 
-svg circle{
+#circleAni {
   stroke-dasharray: 113px;
   stroke-dashoffset: 0px;
-  stroke-linecap: round;
-  stroke-width: 2px;
+  stroke-linecap: none;
+  stroke-width: 4px;
   stroke: red;
   fill: none;
-  animation: countdown 90s linear forwards;
+  animation: countdown1 5s linear forwards;
 }
 
-.circleRepeat {
-  animation: countdown 90s linear forwards;
+.circleAni1 {
+  stroke-dasharray: 113px;
+  stroke-dashoffset: 0px;
+  stroke-linecap: none;
+  stroke-width: 4px;
+  stroke: red;
+  fill: none;
+  animation: countdown1 5s linear forwards;
 }
 
-@keyframes countdown {
+.circleAni2 {
+  stroke-dasharray: 113px;
+  stroke-dashoffset: 0px;
+  stroke-linecap: none;
+  stroke-width: 4px;
+  stroke: red;
+  fill: none;
+  animation: countdown2 5s linear forwards;
+}
+
+@keyframes countdown1 {
   from {
     stroke-dashoffset: 0px;
   }
   to {
     stroke-dashoffset: 113px;
   }
-}</style>
+}
+
+@keyframes countdown2 {
+  from {
+    stroke-dashoffset: 0px;
+  }
+  to {
+    stroke-dashoffset: 113px;
+  }
+}
+</style>
   </head>
   <body>
     <div class="container-fluid">
@@ -190,6 +216,7 @@ svg circle{
                 <div id="countdown">
                   <div class="timer"><span id="time">90</span>s</div>
                     <svg>
+                      <circle id="circleAni1" r="18" cx="20" cy="20" style="display: none;"></circle>
                       <circle id="circleAni" r="18" cx="20" cy="20"></circle>
                     </svg>
                 </div>
