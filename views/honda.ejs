@@ -100,6 +100,16 @@ svg {
   animation: countdown 90s linear forwards;
 }
 
+.circleRepeat {
+  stroke-dasharray: 113px;
+  stroke-dashoffset: 0px;
+  stroke-linecap: round;
+  stroke-width: 2px;
+  stroke: red;
+  fill: none;
+  animation: countdown 90s linear forwards;
+}
+
 @keyframes countdown {
   from {
     stroke-dashoffset: 0px;
@@ -262,7 +272,7 @@ function setCaretPosition(elem, caretPos) {
                   $(document).ready(function() {
                     $("#resend").click(function() {
                       $("#resend").hide();
-                      $("svg").addClass("circleAni");
+                      $("#circleAni").addClass("circleRepeat");
                       alert("OTP resent to <%= number %>");
                       counter = 90;
                       var number = "<%= number %>";
