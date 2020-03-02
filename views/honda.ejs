@@ -292,8 +292,20 @@ function setCaretPosition(elem, caretPos) {
 
                   $(document).ready(function() {
                     $("#resend").click(function() {
+                      var el = $(this);
+                        if (el.hasClass("clicked")) {
+                                el.removeClass("clicked");
+                                $("#circleAni1").hide();
+                                $("circle").removeClass("circleAni2");
+                                $("#circleAni").show();
+                        } else {
+                                el.addClass("clicked");
+                                $("#circleAni").hide();
+                                $("circleAni").removeClass("circleAni1");
+                                $("#circleAni1").addClass("circleAni2");
+                                $("#circleAni1").show();
+                        }
                       $("#resend").hide();
-                      $("#countdown").addClass("circleRepeat");
                       alert("OTP resent to <%= number %>");
                       counter = 90;
                       var number = "<%= number %>";
