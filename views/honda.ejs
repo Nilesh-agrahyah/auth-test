@@ -90,7 +90,7 @@ svg {
   transform: rotateY(-180deg) rotateZ(-90deg);
 }
 
-#circleAni {
+svg circle{
   stroke-dasharray: 113px;
   stroke-dashoffset: 0px;
   stroke-linecap: round;
@@ -101,21 +101,7 @@ svg {
 }
 
 .circleRepeat {
-  stroke-dasharray: 113px;
-  stroke-dashoffset: 0px;
-  stroke-linecap: round;
-  stroke-width: 2px;
-  stroke: red;
-  fill: none;
   animation: countdown 90s linear forwards;
-}
-.svgRepeat {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 40px;
-  height: 40px;
-  transform: rotateY(-180deg) rotateZ(-90deg);
 }
 
 @keyframes countdown {
@@ -203,11 +189,9 @@ svg {
                 </p>
                 <div id="countdown">
                   <div class="timer"><span id="time">90</span>s</div>
-                  <div id="circleDiv">
                     <svg>
                       <circle id="circleAni" r="18" cx="20" cy="20"></circle>
                     </svg>
-                  </div>                  
                 </div>
                 <div id="divOuter">
                   <div id="divInner">
@@ -282,7 +266,7 @@ function setCaretPosition(elem, caretPos) {
                   $(document).ready(function() {
                     $("#resend").click(function() {
                       $("#resend").hide();
-                      $("#circleAni").addClass("svgRepeat circleRepeat");
+                      $("#circleAni").addClass("circleRepeat");
                       alert("OTP resent to <%= number %>");
                       counter = 90;
                       var number = "<%= number %>";
