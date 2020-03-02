@@ -109,7 +109,7 @@ svg {
   fill: none;
   animation: countdown 90s linear forwards;
 }
-.svg {
+.svgRepeat {
   position: absolute;
   top: 0;
   right: 0;
@@ -280,7 +280,7 @@ function setCaretPosition(elem, caretPos) {
                   $(document).ready(function() {
                     $("#resend").click(function() {
                       $("#resend").hide();
-                      $("#circleAni").addClass("svg circleRepeat");
+                      $("#circleAni").addClass("svgRepeat circleRepeat");
                       alert("OTP resent to <%= number %>");
                       counter = 90;
                       var number = "<%= number %>";
