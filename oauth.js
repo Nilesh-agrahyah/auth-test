@@ -5,6 +5,7 @@ var request = require("request");
 const baseURL = "https://testapi.hondaconnect.in/bos";
 var server = oauth2orize.createServer();
   
+
 server.grant(
   oauth2orize.grant.code(
     {
@@ -182,9 +183,9 @@ server.exchange(
         console.log("refresh token found");
         if (refresh && refresh.application == application.id) {
           console.log("refresh token matches application");
-          OAuth.GrantCode.findOne({}, async function(error, grant) {
+          OAuth.GrantCode.findOne({user : refresh.user}, async function(error, grant) {
             console.log(
-              "refresh token matches application and grant code found"
+              "refresh token matches application, user and grant code found"
             );
             if (grant && grant.active && grant.application == application.id) {
               console.log(
@@ -212,31 +213,35 @@ server.exchange(
                     "got response from honda fr refresh " +
                       JSON.stringify(response)
                   );
-                  var newToken = new OAuth.AccessToken({
-                    token: response.headers.alexarefreshtoken,
-                    application: refresh.application,
-                    user: refresh.user,
-                    grant: grant,
-                    scope: grant.scope
-                  });
-                  console.log("saving new token");
-                  newToken.save(function(error) {
-                    var expires = Math.round(
-                      (newToken.expires - new Date().getTime()) / 1000
-                    );
-                    console.log("expires " + expires);
-                    if (!error) {
-                      console.log("token saved");
-                      done(null, newToken.token, refresh.token, {
-                        token_type: "Bearer",
-                        expires_in: expires,
-                        scope: newToken.scope
-                      });
-                    } else {
-                      console.log("token saving error " + error);
-                      done(error, false);
-                    }
-                  });
+                  if(response.statusCode == 200){
+                    
+                    var newToken = new OAuth.AccessToken({
+                      token: response.headers.alexarefreshtoken,
+                      application: refresh.application,
+                      user: refresh.user,
+                      grant: grant,
+                      scope: grant.scope
+                    });
+                    console.log("saving new token");
+                    newToken.save(function(error) {
+                      var expires = Math.round(
+                        (newToken.expires - new Date().getTime()) / 1000
+                      );
+                      console.log("expires " + expires);
+                      if (!error) {
+                        console.log("token saved");
+                        done(null, newToken.token, refresh.token, {
+                          token_type: "Bearer",
+                          expires_in: expires,
+                          scope: newToken.scope
+                        });
+                      } else {
+                        console.log("token saving error " + error);
+                        done(error, false);
+                      }
+                    });
+                  }
+                  
                 }
               });
             } else {
