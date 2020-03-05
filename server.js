@@ -9,7 +9,7 @@ var morgan = require("morgan");
 var express = require("express");
 var passport = require("passport");
 var mongoose = require("mongoose");
-var bodyParser = require("body-parser");
+var bodyParser = require("body-parser"); 
 var BasicStrategy = require("passport-http").BasicStrategy;
 var LocalStrategy = require("passport-local").Strategy;
 var PassportOAuthBearer = require("passport-http-bearer");
@@ -18,7 +18,10 @@ var cookieSession = require("cookie-session");
 const request = require("request");
 var oauthServer = require("./oauth");
 const account = require("./models/account");
-const baseURL = "https://testapi.hondaconnect.in/bos";
+const baseURL = "https://prodapi.hondaconnect.in/bos";
+const key = require("./config/key");
+const cors = require('cors');
+
 
 var port = process.env.VCAP_APP_PORT || process.env.PORT || 3000;
 var host = process.env.VCAP_APP_HOST || "0.0.0.0";
@@ -66,12 +69,15 @@ mongoose_connection.on("disconnected", function() {
 
 mongoose.connect(mongo_url, mongoose_options);
 
+mongoose.set('useFindAndModify', false);
+
+
 var Account = require("./models/account");
 var oauthModels = require("./models/oauth");
 var app_id = "https://alexa-oauth.herokuapp.com/:" + port; //Change according to host used
 
 var app = express();
-
+app.use(cors());
 app.set("view engine", "ejs");
 app.enable("trust proxy");
 app.use(express.static('public'));
@@ -180,7 +186,7 @@ app.post(
     if (req.query.next) {
       res.redirect(req.query.next);
     } else {
-      res.send(`https://alexa-oauth.herokuapp.com/auth/start`); //Change according to host used
+      res.send(`https://oauthserver2.herokuapp.com/auth/start`); //Change according to host used
     }
   }
 );
@@ -228,39 +234,17 @@ class bufferData{
     this.state = state
   }
 } 
-
 let data = new bufferData(undefined, undefined, undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined, undefined, undefined);
 
-//Test purposes
-app.get("/otp", (req, res) => {
-  res.render("honda", {
-    fail: false,
-    otpSent: true,
-    number: 1234567899,
-    otpVerified: undefined
-  });
-});
-
-app.get("/mpin", (req, res) => {
-  res.render("honda", {
-    fail: undefined,
-    otpSent: undefined,
-    number: data.phoneNo,
-    otpVerified: true,
-    mpinVerified: undefined
-  });
-});
-// Test Ended
-
-app.post("/honda/primary", (req, res) => {
+app.post("/honda/primary", (primaryreq, res) => {
   // console.log(req)
-   data.clientId = req.body.clientId;
-  var scope = req.body.scope;
-  var responseType = req.body.responseType;
-  var redirectURI = req.body.redirectURI;
-  data.state = req.body.state;
-  data.phoneNo = req.body.primaryMobileNo;
-  console.log([data.clientId, scope, responseType, redirectURI, data.state]);
+   data.clientId = primaryreq.body.clientId;
+  data.scope = primaryreq.body.scope;
+  data.responseType = primaryreq.body.responseType;
+  data.redirectURI = primaryreq.body.redirectURI;
+  data.state = primaryreq.body.state;
+  data.phoneNo = primaryreq.body.primaryMobileNo;
+  console.log([data.clientId, data.scope, data.responseType, data.redirectURI, data.state]);
 
 
 
@@ -269,16 +253,16 @@ app.post("/honda/primary", (req, res) => {
     url: `${baseURL}/external/alexaVerifyPrimaryContactNo`,
     headers: {
       "Content-Type": "application/json",
-      "Authorization": "Basic YwYzigQsp5v15WmH8SVxgsgQQpJN2Ut9ckapuHN7QEGbUxmLOYRaNRFmS7pkySEk+WEzlMAuWmryrh2UgA=="
+      "Authorization": key 
     },
-    body: JSON.stringify({ primaryMobileNo: data.phoneNo, emailId: "" })
+    body: JSON.stringify({ primaryMobileNo: primaryreq.body.primaryMobileNo, emailId: "" })
   };
   console.log("Options " + JSON.stringify(options));
-  request(options, function(error, response) {
-    console.log("Response " + JSON.stringify(response));
+  request(options, function(error, Phoneresponse) {
+    console.log("Phoneresponse " + JSON.stringify(Phoneresponse));
     if (error) throw new Error(error);
-    let responseS = JSON.parse(response.body);
-    console.log("response from primary: ", responseS)
+    let responseS = JSON.parse(Phoneresponse.body);
+
     app.post('/resendOtp', (req, res)=>{
       let resentOtp=req.body.otp;
       let resentKey=req.body.key;
@@ -290,70 +274,70 @@ app.post("/honda/primary", (req, res) => {
       res.send({status:200});
     })
 
-    
-    let resOtp = responseS.data.generatedOtp;
-    console.log("OTP: ", resOtp); 
-    let resKey = responseS.data.key;
+    let resOtp =(JSON.parse(Phoneresponse.body)).data.generatedOtp;
+    console.log("OTP: ", resOtp);
+    data.resKey = (JSON.parse(Phoneresponse.body)).data.key;
+    console.log('res key', data.resKey)
+  
     if (responseS.data.mpinStatus == false) {
       // setTimeout(res, 2000);
-      return res.status(403).render("honda", {
-        fail: true,
-        otpSent: false, 
-        number: data.phoneNo,
-        otpVerified: undefined,
-        clientId: data.clientId,
-        scope: scope,
-        redirectURI: redirectURI,
-        responseType: responseType,
-        state: state
-      });
+      return res.status(200).send({ status: false, operation: 'verifyNumber'});
     }
-    res.render("honda", {
-      fail: false,
-      otpSent: true,
-      number: data.phoneNo,
-      otpVerified: undefined
-    });
+    res.status(200).send({
+      status: true,
+      operation: 'verifyNumber'
+    })
+
     app.post("/honda/verifyOtp", (req, res) => {
+      console.log("value of req in verify otp : " + req)
       let sentOpt = req.body.otp;
       var options = {
         method: "POST",
         url: `${baseURL}/external/alexaVerifyOtpPin`,
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Basic YwYzigQsp5v15WmH8SVxgsgQQpJN2Ut9ckapuHN7QEGbUxmLOYRaNRFmS7pkySEk+WEzlMAuWmryrh2UgA=="
+          "Authorization": key
         },
         body: JSON.stringify({
-          key: resKey,
+          key: data.resKey,
           otp: sentOpt,
           emailId: "",
           primaryMobileNo: data.phoneNo,
           customerId: "",
           customerCategory: ""
         })
+
       };
       console.log("options in verifyotp: " +JSON.stringify(options))
       request(options, async function(error, response) {
         if (error) throw new Error(error);
+        console.log("response " + JSON.stringify(response))
         let resData = JSON.parse(response.body);
+        console.log("res data " + JSON.stringify(resData));
+        
+      //  data.phoneNo = resData.data.primaryMobileNo
+      
+        if (resData.data.otpStatus == "False" && resData.status.code == 400) {
+            return res.status(200).send({status:false,operation: 'verifyOTP', otpExpired: false});   
+        }
+        if(resData.data.otpStatus == "False" && resData.status.code == 80077 || resData.status.code == 80077)
+        {
+          return res.status(200).send({status:false,operation: 'verifyOTP', otpExpired: true});          
+        }
+
         let custId = resData.data.loginInfo.customerId;
         let custName = resData.data.loginInfo.firstname;
         let custEmail = resData.data.loginInfo.emailId;
-        let optStat = resData.data.otpStatus;
+
+        console.log("cust email from res data: " + custEmail);
         console.log("data" + JSON.stringify(data))
-        if (data.optStat == "False") {
-          return res.render("honda", {
-            fail: false,
-            otpSent: true,
-            number: data.phoneNo,
-            otpVerified: false
-          });
-        }
+        console.log("Res data: ", resData);
+
         let checkUser = await account.findOne({ email: custEmail });
         if (!checkUser) {
           var options = {
             method: "POST",
-            url: `https://alexa-oauth.herokuapp.com/newuser`,
+            url: `https://oauthserver2.herokuapp.com/newuser`,
             headers: {
               "Content-Type": "application/x-www-form-urlencoded"
             },
@@ -369,16 +353,13 @@ app.post("/honda/primary", (req, res) => {
           });
         }
 
-        res.render("honda", {
-          fail: undefined,
-          otpSent: undefined,
-          number: data.phoneNo,
-          otpVerified: true,
-          mpinVerified: undefined
-        });
+        console.log("value of number for mpin page " +  data.phoneNo)
+        res.status(200).send({status:true,operation: 'verifyOTP'})
 
         app.post("/honda/verifyMpin", (req, res) => {
           let submittedMpin = req.body.mpin;
+
+          console.log("value of number in mpin page " +  data.phoneNo)
           /*var  options = {
             method: "POST",
             url: `${baseURL}/authentication/loginApi`,
@@ -390,14 +371,14 @@ app.post("/honda/primary", (req, res) => {
             },
             body: JSON.stringify({ emailId: "", primaryMobileNo: data.phoneNo })
           }; */
-          var options = {
+          var options = { 
             'method': 'GET',
             'url': `${baseURL}/external/login`,
             'headers': {
             'mpin': submittedMpin,
             'Content-Type': 'application/json',
-            'primaryMobileNo': data.phoneNo,
-            "Authorization": "Basic YwYzigQsp5v15WmH8SVxgsgQQpJN2Ut9ckapuHN7QEGbUxmLOYRaNRFmS7pkySEk+WEzlMAuWmryrh2UgA=="
+            'primaryMobileNo':  data.phoneNo,
+            "Authorization": key
             }
             };  
             console.log("Options: ", options);
@@ -405,12 +386,15 @@ app.post("/honda/primary", (req, res) => {
             console.log(response.headers);
             if (error) throw new Error(error);
          let   responseS = JSON.parse(response.body);
+         console.log("Val of responses: ", responseS);
+        // console.log("val of email for auth login " +  responseS.data.customerDetails.email)
             if (responseS.status.status == true) {
-              let checkIfData = await account.findOne({ email: custEmail });
+              let checkIfData = await account.findOne({ email: responseS.data.customerDetails.email });
               console.log("value of checkIfData" + checkIfData);
-              if (!checkIfData.data) {
-                await account.findOneAndUpdate(
-                  { email: custEmail },
+
+              if (!checkIfData.data) {  
+                await account.findOneAndUpdate( 
+                  { email: responseS.data.customerDetails.email },  
                   {
                     $set: {
                       mpin: submittedMpin,
@@ -421,17 +405,32 @@ app.post("/honda/primary", (req, res) => {
                     }
                   }
                 );
+              }else{
+                await account.findOneAndUpdate(
+                  { email: responseS.data.customerDetails.email },
+                  {
+                    $set: {
+                      mpin: submittedMpin, 
+                      data: responseS.data,
+                      status: responseS.status,
+                      accessToken: response.headers.alexarefreshtoken,
+                      refreshToken: response.headers.alexaaccesstoken
+                    }
+                  }
+                );
               }
 
+              console.log("custname before auth login: " + responseS.data.customerDetails.firstname)
+              console.log("custId before auth login: " + responseS.data.customerDetails.customerId)
               var options = {
                 method: "POST",
-                url: `https://alexa-oauth.herokuapp.com/login`,
+                url: `https://oauthserver2.herokuapp.com/login`,
                 headers: {
                   "Content-Type": "application/x-www-form-urlencoded"
                 },
                 form: {
-                  username: custName,
-                  password: custId
+                  username: responseS.data.customerDetails.firstname,
+                  password: responseS.data.customerDetails.customerId
                 }
               };
               request(options, function(error, response, body) {
@@ -439,18 +438,19 @@ app.post("/honda/primary", (req, res) => {
                 console.log(
                   "value of login response after post" + JSON.stringify(body)
                 );
-                res.redirect(
-                  `${response.body}?scope=${scope}&client_id=${data.clientId}&redirect_uri=${redirectURI}&response_type=${responseType}&CustName=${custName}&CustId=${custId}&state=${data.state}`
-                );
-
+                res.send({
+                  status: true,
+                  operation: 'verifyMPIN',
+                  custName: responseS.data.customerDetails.firstname,
+                  custId: responseS.data.customerDetails.customerId,
+                  authURL: `${response.body}?scope=${data.scope}&client_id=${data.clientId}&redirect_uri=${data.redirectURI}&response_type=${data.responseType}&CustName=${responseS.data.customerDetails.firstname}&CustId=${responseS.data.customerDetails.customerId}&state=${data.state}`
+                })
+                  for (var member in data) delete data[member]
               });
             } else {
-              res.render("honda", {
-                fail: undefined,
-                otpSent: undefined,
-                number: data.phoneNo,
-                otpVerified: true,
-                mpinVerified: false
+              res.send({
+                status: false,
+                operation: 'verifyMPIN'
               });
             }
           });
@@ -477,6 +477,7 @@ app.get("/honda/primary", (req, res) => {
 app.get(
   "/auth/start",
   oauthServer.authorize(function(applicationID, redirectURI, done) {
+    console.log("applicationID " + applicationID)
     oauthModels.Application.findOne({ oauth_id: applicationID }, async function(
       error,
       application
@@ -563,7 +564,7 @@ app.post(
         },
         function(error, user, info) {
           console.log("/auth/finish authenting");
-          if (user) {
+          if (user) { 
             console.log(user.username);
             req.user = user;
             next();
