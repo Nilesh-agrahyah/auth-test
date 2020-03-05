@@ -186,7 +186,7 @@ app.post(
     if (req.query.next) {
       res.redirect(req.query.next);
     } else {
-      res.send(`https://oauthserver2.herokuapp.com/auth/start`); //Change according to host used
+      res.send(`https://alexa-oauth.herokuapp.com/auth/start`); //Change according to host used
     }
   }
 );
@@ -337,7 +337,7 @@ app.post("/honda/primary", (primaryreq, res) => {
         if (!checkUser) {
           var options = {
             method: "POST",
-            url: `https://oauthserver2.herokuapp.com/newuser`,
+            url: `https://alexa-oauth.herokuapp.com/newuser`,
             headers: {
               "Content-Type": "application/x-www-form-urlencoded"
             },
@@ -424,7 +424,7 @@ app.post("/honda/primary", (primaryreq, res) => {
               console.log("custId before auth login: " + responseS.data.customerDetails.customerId)
               var options = {
                 method: "POST",
-                url: `https://oauthserver2.herokuapp.com/login`,
+                url: `https://alexa-oauth.herokuapp.com/login`,
                 headers: {
                   "Content-Type": "application/x-www-form-urlencoded"
                 },
